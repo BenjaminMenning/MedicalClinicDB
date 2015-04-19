@@ -1,3 +1,4 @@
+package MedicalClinicDB;
 
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -57,7 +58,7 @@ public class MedicalDBUI
     private String heightStr = "Height:";
     private String weightStr = "Weight:";
     
-    private String patientConditionStr = "Patient "
+    private String patientConditionStr = "Patient ";
     
     private String[] addPatientStrings = {"Add Patient", "Add Patient Condition"
             , "Add Patient Healthcare Provider", "Add Patient Assistive Device"
@@ -189,7 +190,7 @@ public class MedicalDBUI
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(4,1)); 
         
-        
+        return panel;
     }
     
     public JPanel createPatientSearchPanel()
