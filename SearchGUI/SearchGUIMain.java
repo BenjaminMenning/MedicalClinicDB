@@ -348,15 +348,17 @@ public class SearchGUIMain {
 				terms.put("Secondary Provider", txtFldSecondProvider.getText());
 				terms.put("Study", txtFldStudy.getText());
 				
-				SearchGUIDB search = new SearchGUIDB(terms);
+				SearchGUIDB search = new SearchGUIDB();
 				
 				try {
 					
-					search.patientSearch();
+					search.patientSearch(terms);
 					
 					tableModel.setRowCount(0);
 					
-					List<Vector<String>> searchData = search.getData();
+					List<Vector<String>> searchData = null;
+					
+					 searchData = search.getData();
 					
 					System.out.println("Number of data tiems:" + searchData.size());
 					
