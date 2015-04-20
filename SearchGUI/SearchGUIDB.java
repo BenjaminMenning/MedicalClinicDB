@@ -185,6 +185,11 @@ public class SearchGUIDB {
 	}
 
 	public List<Vector<String>> getData() {
+		if (result.size() == 0) {
+			Vector<String> row = new Vector<>(1);
+			row.add("No Results.");
+			result.add(row);
+		}
 		return result;
 	}
 
