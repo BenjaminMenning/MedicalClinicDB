@@ -22,6 +22,9 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -61,9 +64,9 @@ public class SearchGUIMain {
 	private String[] columnNames = { "Patient ID", "Clinic Number",
 			"First Name", "Last Name", "Gender", "DOB", "Provider" };
 
-	private Object[][] data = { { "0-000-000", "Testy", "McTester", "T",
+	private Object[][] data = { { "1", "0-000-000", "Testy", "McTester", "T",
 			"William Williamson", "01/01/1978" } };
-	
+
 	private Map<String, String> terms = new HashMap<String, String>();
 
 	private DefaultTableModel tableModel = new DefaultTableModel(data,
@@ -94,7 +97,7 @@ public class SearchGUIMain {
 	 */
 	public SearchGUIMain() {
 		initialize();
-		
+
 		terms.put("First Name", "");
 		terms.put("Last Name", "");
 		terms.put("ICD9 Diagnosis", "");
@@ -125,6 +128,7 @@ public class SearchGUIMain {
 				txtFldDiagnosis.setText(null);
 				txtFldDiagnosis.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("ICD9 Diagnosis", txtFldDiagnosis.getText());
@@ -151,6 +155,21 @@ public class SearchGUIMain {
 		};
 		table.setRowSelectionAllowed(true);
 		table.setShowVerticalLines(false);
+
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2) {
+					JTable target = (JTable) e.getSource();
+					int row = target.getSelectedRow();
+					Integer patientId = Integer.parseInt((String) table.getModel().getValueAt(row, 0));
+
+					SearchGUIPatientInfo frame = new SearchGUIPatientInfo(
+							patientId);
+					frame.setVisible(true);
+
+				}
+			}
+		});
 		scrollPane.setViewportView(table);
 
 		txtFldFirstName = new JTextField();
@@ -160,6 +179,7 @@ public class SearchGUIMain {
 				txtFldFirstName.setText(null);
 				txtFldFirstName.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("First Name", txtFldFirstName.getText());
@@ -178,6 +198,7 @@ public class SearchGUIMain {
 				txtFldProvider.setText(null);
 				txtFldProvider.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Provider", txtFldProvider.getText());
@@ -196,6 +217,7 @@ public class SearchGUIMain {
 				txtFldProcedure.setText(null);
 				txtFldProcedure.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("ICD9 Procedure", txtFldProcedure.getText());
@@ -214,6 +236,7 @@ public class SearchGUIMain {
 				txtFldLastName.setText(null);
 				txtFldLastName.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Last Name", txtFldLastName.getText());
@@ -232,6 +255,7 @@ public class SearchGUIMain {
 				txtFldSecondProvider.setText(null);
 				txtFldSecondProvider.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Secondary Provider", txtFldSecondProvider.getText());
@@ -250,6 +274,7 @@ public class SearchGUIMain {
 				txtFldStudy.setText(null);
 				txtFldStudy.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Study", txtFldStudy.getText());
@@ -268,6 +293,7 @@ public class SearchGUIMain {
 				txtFldClinicNumber.setText(null);
 				txtFldClinicNumber.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Clinic Number", txtFldClinicNumber.getText());
@@ -286,6 +312,7 @@ public class SearchGUIMain {
 				txtFldDOBStart.setText(null);
 				txtFldDOBStart.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("DOB Start", txtFldDOBStart.getText());
@@ -305,6 +332,7 @@ public class SearchGUIMain {
 				txtFldCondition.setText(null);
 				txtFldCondition.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Condition", txtFldCondition.getText());
@@ -323,6 +351,7 @@ public class SearchGUIMain {
 				txtFldGender.setText(null);
 				txtFldGender.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("Gender", txtFldGender.getText());
@@ -358,6 +387,7 @@ public class SearchGUIMain {
 				txtFldDOBEnd.setText(null);
 				txtFldDOBEnd.setForeground(null);
 			}
+
 			@Override
 			public void focusLost(FocusEvent e) {
 				terms.put("DOB End", txtFldDOBEnd.getText());
