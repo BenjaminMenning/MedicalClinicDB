@@ -95,17 +95,18 @@ public class SearchGUIMain {
 	public SearchGUIMain() {
 		initialize();
 		
-		terms.put("First Name", " ");
-		terms.put("Last Name", " ");
-		terms.put("ICD9 Diagnosis", " ");
-		terms.put("ICD9 Procedure", " ");
-		terms.put("Condition", " ");
-		terms.put("Study", " ");
-		terms.put("DOB Start", " ");
-		terms.put("DOB End", " ");
-		terms.put("Clinic Number", " ");
-		terms.put("Provider", " ");
-		terms.put("Secondary Provider", " ");
+		terms.put("First Name", "");
+		terms.put("Last Name", "");
+		terms.put("ICD9 Diagnosis", "");
+		terms.put("ICD9 Procedure", "");
+		terms.put("Condition", "");
+		terms.put("Study", "");
+		terms.put("DOB Start", "");
+		terms.put("DOB End", "");
+		terms.put("Clinic Number", "");
+		terms.put("Provider", "");
+		terms.put("Secondary Provider", "");
+		terms.put("Gender", "");
 	}
 
 	/**

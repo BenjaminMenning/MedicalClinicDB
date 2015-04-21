@@ -56,11 +56,13 @@ public class SearchGUIDB {
 		// Check if a Visit join is needed
 		if (!terms.get("ICD9 Diagnosis").isEmpty()
 				|| !terms.get("ICD9 Procedure").isEmpty()
-				|| !terms.get("ICD9 Study").isEmpty()) {
-			
+				|| !terms.get("Study").isEmpty()) {
+
+			// Join Visit table
 			baseQueryJoin += "JOIN Visit AS v \n"
 					+ "ON p.patientID = v.patientID \n";
-			
+
+			// Check if ICD9 Diagnosis is needed
 			if (!terms.get("ICD9 Diagnosis").isEmpty()) {
 				baseQueryJoin += "JOIN VisitDiagnosis_xref AS vdx \n"
 						+ "ON v.visitID = vdx.visitID \n"
@@ -69,35 +71,13 @@ public class SearchGUIDB {
 						+ "JOIN ICD9Diagnosis AS icdd \n"
 						+ "ON d.icd9DiagnosisID = icdd.icd9DiagnosisID \n";
 
-				baseQueryWhere += "AND (icdd.icd9Code LIKE('%" + terms.get("ICD9 Diagnosis") + "%') OR icdd.icd9Description LIKE('%" + terms.get("ICD9 Diagnosis") + "%')) \n";
-				/*
-				 * try {
-				 * 
-				 * ps = connection .prepareStatement(
-				 * "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate, hp.firstName AS providerFirstName, hp.middleName AS providerMiddleName, hp.lastName AS providerLastName \n"
-				 * + "FROM Patient AS p \n" + "JOIN Visit AS v \n" +
-				 * "ON p.patientID = v.patientID \n" +
-				 * "JOIN VisitDiagnosis_xref AS vdx \n" +
-				 * "ON v.visitID = vdx.visitID \n" + "JOIN Diagnosis AS d \n" +
-				 * "ON d.diagnosisID = vdx.diagnosisID \n" +
-				 * "JOIN ICD9Diagnosis AS icdd \n" +
-				 * "ON d.icd9DiagnosisID = icdd.icd9DiagnosisID \n" +
-				 * "JOIN PatientHealthcareProvider_xref AS phpx \n" +
-				 * "ON p.patientID = phpx.patientID \n" +
-				 * "JOIN HealthcareProvider AS hp \n" +
-				 * "ON hp.healthcareProviderID = phpx.healthcareProviderID \n" +
-				 * "WHERE icdd.icd9Code LIKE(?) OR icdd.icd9Description LIKE(?)"
-				 * + "GROUP BY p.patientID");
-				 * 
-				 * ps.setString(1, "%" + terms.get("ICD9 Diagnosis") + "%");
-				 * ps.setString(2, "%" + terms.get("ICD9 Diagnosis") + "%");
-				 * 
-				 * } catch (SQLException e) { // TODO Auto-generated catch block
-				 * e.printStackTrace(); }
-				 */
-
+				baseQueryWhere += "AND (icdd.icd9Code LIKE('%"
+						+ terms.get("ICD9 Diagnosis")
+						+ "%') OR icdd.icd9Description LIKE('%"
+						+ terms.get("ICD9 Diagnosis") + "%')) \n";
 			}
 
+			// Check if ICD9 Procedure is needed
 			if (!terms.get("ICD9 Procedure").isEmpty()) {
 
 				baseQueryJoin += "JOIN VisitTreatment_xref AS vtx \n"
@@ -108,96 +88,94 @@ public class SearchGUIDB {
 						+ "ON t.treatmentID = ticdpx.treatmentID \n"
 						+ "JOIN ICD9Procedure AS icdp \n"
 						+ "ON ticdpx.icd9ProcedureID = icdp.icd9ProcedureID \n";
-				
-				baseQueryWhere += "AND (icdp.icd9Code LIKE('%" + terms.get("ICD9 Procedure") + "%') OR icdp.icd9Description LIKE('%" + terms.get("ICD9 Procedure") + "%')) \n";
 
-				/*
-				 * try { ps = connection .prepareStatement(
-				 * "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate, hp.firstName AS providerFirstName, hp.middleName AS providerMiddleName, hp.lastName AS providerLastName \n"
-				 * + "FROM Patient AS p \n" + "JOIN Visit AS v \n" +
-				 * "ON p.patientID = v.patientID \n" +
-				 * "JOIN VisitTreatment_xref AS vtx \n" +
-				 * "ON v.visitID = vtx.visitID \n" + "JOIN Treatment AS t \n" +
-				 * "ON t.treatmentID = vtx.treatmentID \n" +
-				 * "JOIN TreatmentICD9Procedure_xref AS ticdpx \n" +
-				 * "ON t.treatmentID = ticdpx.treatmentID \n" +
-				 * "JOIN ICD9Procedure AS icdp \n" +
-				 * "ON ticdpx.icd9ProcedureID = icdp.icd9ProcedureID \n" +
-				 * "JOIN PatientHealthcareProvider_xref AS phpx \n" +
-				 * "ON p.patientID = phpx.patientID \n" +
-				 * "JOIN HealthcareProvider AS hp \n" +
-				 * "ON hp.healthcareProviderID = phpx.healthcareProviderID \n" +
-				 * "WHERE icdp.icd9Code LIKE(?) OR icdp.icd9Description LIKE(?)"
-				 * + "GROUP BY p.patientID");
-				 * 
-				 * ps.setString(1, "%" + terms.get("ICD9 Procedure") + "%");
-				 * ps.setString(2, "%" + terms.get("ICD9 Procedure") + "%"); }
-				 * catch (SQLException e) { // TODO Auto-generated catch block
-				 * e.printStackTrace(); }
-				 */
+				baseQueryWhere += "AND (icdp.icd9Code LIKE('%"
+						+ terms.get("ICD9 Procedure")
+						+ "%') OR icdp.icd9Description LIKE('%"
+						+ terms.get("ICD9 Procedure") + "%')) \n";
+			}
+			
+			// Check if Study is needed
+			if (!terms.get("Study").isEmpty()) {
 
+				baseQueryJoin += "JOIN VisitStudy_xref AS vsx \n"
+						+ "ON v.visitID = vsx.visitID \n" + "JOIN Study AS s \n"
+						+ "ON s.studyID = vsx.studyID \n";
+
+				baseQueryWhere += "AND (s.studyID LIKE('%" + terms.get("Study")
+						+ "%') OR s.typeOfStudy LIKE('%" + terms.get("Study")
+						+ "%')) \n";
 			}
 		}
-		
-		if (!terms.get("Study").isEmpty()) {
 
-			baseQueryJoin += "JOIN VisitStudy_xref AS vsx \n"
-					+ "ON v.visitID = vsx.visitID \n" + "JOIN Study AS s \n"
-					+ "ON s.studyID = vsx.studyID \n";
-			
-			baseQueryWhere += "AND (s.studyID LIKE('%" + terms.get("Study") + "%') OR s.typeOfStudy LIKE('%" + terms.get("Study") + "%')) \n";
-
-			/*
-			 * try { ps = connection .prepareStatement(
-			 * "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate, hp.firstName AS providerFirstName, hp.middleName AS providerMiddleName, hp.lastName AS providerLastName \n"
-			 * + "FROM Patient AS p \n" + "JOIN Visit AS v \n" +
-			 * "ON p.patientID = v.patientID \n" +
-			 * "JOIN VisitStudy_xref AS vsx \n" +
-			 * "ON v.visitID = vsx.visitID \n" + "JOIN Study AS s \n" +
-			 * "ON s.studyID = vsx.studyID \n" +
-			 * "JOIN PatientHealthcareProvider_xref AS phpx \n" +
-			 * "ON p.patientID = phpx.patientID \n" +
-			 * "JOIN HealthcareProvider AS hp \n" +
-			 * "ON hp.healthcareProviderID = phpx.healthcareProviderID \n" +
-			 * "WHERE s.studyID LIKE(?) OR s.typeOfStudy LIKE(?)" +
-			 * "GROUP BY p.patientID");
-			 * 
-			 * ps.setString(1, "%" + terms.get("Study") + "%"); ps.setString(2,
-			 * "%" + terms.get("Study") + "%"); } catch (SQLException e) { //
-			 * TODO Auto-generated catch block e.printStackTrace(); }
-			 */
-
-		}
+		// Check if Condition is needed
 		if (!terms.get("Condition").isEmpty()) {
 
 			baseQueryJoin += "JOIN PatientCondition_xref AS pcx \n"
 					+ "ON p.patientID = pcx.patientID \n"
 					+ "JOIN `Condition` AS c \n"
 					+ "ON c.conditionID = pcx.conditionID \n";
-			
-			baseQueryWhere += "AND c.conditionName LIKE('%" + terms.get("Condition") + "%') \n";
 
-			/*
-			 * try { ps = connection .prepareStatement(
-			 * "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate, hp.firstName AS providerFirstName, hp.middleName AS providerMiddleName, hp.lastName AS providerLastName \n"
-			 * + "FROM Patient AS p \n" + "JOIN PatientCondition_xref AS pcx \n"
-			 * + "ON p.patientID = pcx.patientID \n" +
-			 * "JOIN `Condition` AS c \n" +
-			 * "ON c.conditionID = pcx.conditionID \n" +
-			 * "JOIN PatientHealthcareProvider_xref AS phpx \n" +
-			 * "ON p.patientID = phpx.patientID \n" +
-			 * "JOIN HealthcareProvider AS hp \n" +
-			 * "ON hp.healthcareProviderID = phpx.healthcareProviderID \n" +
-			 * "WHERE c.conditionName LIKE(?)" + "GROUP BY p.patientID");
-			 * 
-			 * ps.setString(1, "%" + terms.get("Condition") + "%"); } catch
-			 * (SQLException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
-			 */
+			baseQueryWhere += "AND c.conditionName LIKE('%"
+					+ terms.get("Condition") + "%') \n";
+		}
+
+		// Check for First Name
+		if (!terms.get("First Name").isEmpty()) {
+			baseQueryWhere += "AND p.firstName LIKE('%"
+					+ terms.get("First Name") + "%') \n";
+		}
+
+		// Check for Last Name
+		if (!terms.get("Last Name").isEmpty()) {
+			baseQueryWhere += "AND p.lastName LIKE('%" + terms.get("Last Name")
+					+ "%') \n";
+		}
+
+		// Check for Clinic Number
+		if (!terms.get("Clinic Number").isEmpty()) {
+			baseQueryWhere += "AND p.clinicNumber LIKE('%"
+					+ terms.get("Clinic Number") + "%') \n";
+		}
+
+		// Check for Provider
+		if (!terms.get("Provider").isEmpty()) {
+			baseQueryWhere += "AND (hp.firstName LIKE('%"
+					+ terms.get("Provider") + "%') OR hp.lastName LIKE('%"
+					+ terms.get("Provider") + "%')) \n";
+			baseQueryWhere += "AND phpx.healthcareProviderType = 'Primary'";
+		}
+
+		// Check for Secondary Provider
+		if (!terms.get("Secondary Provider").isEmpty()) {
+			baseQueryWhere += "AND (hp.firstName LIKE('%"
+					+ terms.get("Secondary Provider")
+					+ "%') OR hp.lastName LIKE('%"
+					+ terms.get("Secondary Provider") + "%')) \n";
+			baseQueryWhere += "AND phpx.healthcareProviderType = 'Secondary'";
+		}
+
+		// Check for Gender
+		if (!terms.get("Gender").isEmpty()) {
+			baseQueryWhere += "AND p.gender LIKE('%" + terms.get("Gender")
+					+ "%') \n";
+		}
+
+		// Check for DOB Start
+		if (!terms.get("DOB Start").isEmpty()) {
+			baseQueryWhere += "AND p.birthdate >= '" + terms.get("DOB Start")
+					+ "' \n";
+		}
+
+		// Check for DOB End
+		if (!terms.get("DOB End").isEmpty()) {
+			baseQueryWhere += "AND p.birthdate <= '" + terms.get("DOB End")
+					+ "' \n";
 		}
 
 		try {
-			String query = baseQuerySelect + baseQueryJoin + baseQueryLastJoin + baseQueryWhere + baseQueryGroup;
+			String query = baseQuerySelect + baseQueryJoin + baseQueryLastJoin
+					+ baseQueryWhere + baseQueryGroup;
 			System.out.println(query);
 			Statement s = connection.createStatement();
 			ResultSet rs = s.executeQuery(query);
