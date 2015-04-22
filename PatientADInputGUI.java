@@ -1,100 +1,144 @@
 package MedicalClinicDB;
 
-
-import java.awt.Color;
-import java.awt.GridLayout;
+import .*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/** 
+ * Author:          Benjamin Menning, Dan Johnson, Holly Schreader
+ * 
+ * Date:            05/05/2015 
+ *                
+ * Course:          CS 485 - 01, Spring 2015
+ * 
+ * Assignment:      Database Project
+ * 
+ * Description:     This program is a medical database program that utilizes a
+ *                  MySQL relational database management system to allow users
+ *                  to input and view information about patients and visits.
+ *                  It allows users to input information on a wide variety of 
+ *                  things, including patient conditions and assistive devices,
+ *                  visit diagnoses and studies, as well as information about
+ *                  healthcare providers or systems used. It also allows a user
+ *                  to search and lookup information about patients based on a
+ *                  wide variety of criteria like name, diagnoses, date of birth
+ *                  and more. It also allows users to see more detailed 
+ *                  information about patients and their visits.
  */
 
-/**
- *
- * @author Ben
+/** 
+ * This class extends the PatientMiscInputGUI class and allows a user to 
+ * enter an assistive device for a patient.
+ * 
+ * @author Benjamin Menning, Dan Johnson, Holly Schreader
+ * @version 05/05/2015 
  */
 public class PatientADInputGUI extends PatientMiscInputGUI
 {
-    //JLabel variables
-//    private JLabel clinicNumberL;
+    // JLabel variables
     private JLabel assistiveDeviceL;
         
-//    private String clinicNumberStr = "Clinic Number:";
+    // String and ArrayList of string variables for assistive devices
     private String assistiveDeviceStr = "Assistive Device:";
-//    private ArrayList<String> clinicNumberList;
     private ArrayList<String> assistiveDeviceList;
-    //JTextField varables
-//    private JComboBox clinicNumberCB;
+    
+    // JTextField varables
     private JComboBox assistiveDeviceCB;                                    
     
-    //JButton variables
+    // JButton variables
     private JButton addAssistiveDeviceB;
     
+    // Button handler
     private addAssistiveDeviceButtonHandler addAssistiveDeviceH;
                                 
-    //JPanel variables
-//    private JPanel clinicNumberP;
+    // JPanel variables
     private JPanel assistiveDeviceP;
-    private JPanel addPatientButtonP;
+    private JPanel addADButtonP;
         
-//    private MedicalClinicDB medicalClinicDB;
-    
+    /**
+     * This constructor contains a parameter to assign the medical clinic 
+     * database for the assistive device input GUI.
+     * 
+     * @param medicalClinicObj the medical clinic DB to be assigned
+     */
     public PatientADInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
     }
     
+    /**
+     * This method creates and retrieves the components for an assistive device 
+     * input panel.
+     * 
+     * @return JPanel   returns the JPanel containing assis. device components
+     * @throws SQLException if SQL database encounters an error
+     */
     @Override
     public JPanel createInputPanel() throws SQLException
     {
+        // Call superclass
         super.createInputPanel();
+
+        // Assign assistive device label for field
         assistiveDeviceL = new JLabel(assistiveDeviceStr, SwingConstants.LEFT);
-        assistiveDeviceCB = new JComboBox();
-        assistiveDeviceCB.setEditable(true);
+
+        // Assign assistive device list from database
+        assistiveDeviceList = medicalClinicDB.getADList();
         
+        // Assign assistive device combo box information and adds list 
+        // information
+        assistiveDeviceCB = new JComboBox(assistiveDeviceList.toArray());
+        assistiveDeviceCB.setEditable(true);
+        AutoCompleteDecorator.decorate(assistiveDeviceCB);
+        
+        // Assign add asssitive button and button handler
         addAssistiveDeviceB = new JButton("Add Patient Assistive Device");
         addAssistiveDeviceH = new addAssistiveDeviceButtonHandler();
         addAssistiveDeviceB.addActionListener(addAssistiveDeviceH);
-        addPatientButtonP = new JPanel();
-        addPatientButtonP.add(addAssistiveDeviceB);
         
+        // Assign panel for add button
+        addADButtonP = new JPanel();
+        addADButtonP.add(addAssistiveDeviceB);
+        
+        // Assign assistive device panel components
         assistiveDeviceP = new JPanel();
         assistiveDeviceP.add(assistiveDeviceL);
         assistiveDeviceP.add(assistiveDeviceCB);
         
+        // Add assistive device panels to base panel and return final panel
         basePanel.add(assistiveDeviceP);
-        basePanel.add(addPatientButtonP);
+        basePanel.add(addADButtonP);
         return basePanel;
     }
     
+    /**
+     * This method clears the fields within the input panel.
+     * 
+     */
+    @Override
     public void clearFields()
     {
         super.clearFields();
         assistiveDeviceCB.setSelectedItem("");
     }
         
+    /** 
+     * This class performs the action of adding an assistive device by pressing
+     * a button.
+     * 
+     * @author Benjamin Menning, Dan Johnson, Holly Schreader
+     * @version 05/05/2015
+     */
     private class addAssistiveDeviceButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -110,13 +154,13 @@ public class PatientADInputGUI extends PatientMiscInputGUI
                         determineAssistiveDeviceID(assistiveDevice);
                 medicalClinicDB.addPatientAssistiveDevice(null, 
                         patientID, assistiveDeviceID);
+                clearFields();
             } 
             catch (SQLException ex) 
             {
                 Logger.getLogger(PatientADInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
-            clearFields();
         }
     }
 }
