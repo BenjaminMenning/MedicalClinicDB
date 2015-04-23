@@ -1,6 +1,5 @@
 package MedicalClinicDB;
 
-import .*;
 import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
