@@ -1,6 +1,7 @@
 package MedicalClinicDB;
 
 
+import .*;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
@@ -63,13 +64,14 @@ public class MedicalDBUI
     
     private String patientInputStr = "Add a Patient";
     private String patientADInputStr = "Add a Patient Assistive Device";
+    private String patientConditionInputStr = "Add a Patient Condition";
+    private String patientHCPInputStr = "Add a Patient Healthcare Provider";
     
-//    private String patientConditionStr = "Patient "
-    
-    private String[] addPatientStrings = {"Add Patient", "Add Patient Condition"
-            , "Add Patient Healthcare Provider", "Add Patient Assistive Device"
-            };
-    
+    private String visitInputStr = "Add a Visit";
+    private String visitDiagnosisInputStr = "Add a Visit Diagnosis";
+    private String visitFileInputStr = "Add a Visit File";
+    private String visitStudyInputStr = "Add a Visit Study";
+        
     //JTextField varables
     private JTextField patientIDTF, patientIDTF2;
     private JTextField clinicNumberTF, clinicNumberTF2;
@@ -84,7 +86,7 @@ public class MedicalDBUI
     private JButton addPatientB;
     private JButton searchPatientB;
     
-    private JComboBox addPatientList = new JComboBox(addPatientStrings);
+//    private JComboBox addPatientList = new JComboBox(addPatientStrings);
     
     private searchPatientButtonHandler searchPatientH;
 //    private changePatientInputPanelHandler changePatientPanelH;
@@ -103,19 +105,21 @@ public class MedicalDBUI
     private JPanel patientInputComboP;
     private JPanel patientInputPanels;
     private JPanel patientInputTabP;
+    private JPanel visitInputComboP;
+    private JPanel visitInputPanels;
+    private JPanel visitInputTabP;
     
     private JFrame medicalDBUIFrame;
-    
-//    //Action variables
-//    private Action submitAnswerA, submitWagerA;  
-    
+        
     private MedicalClinicDB medicalClinicDB;
     private PatientInputGUI patientInputGUI;
     private PatientADInputGUI patientADInputGUI;
+    private PatientConditionInputGUI patientConditionInputGUI;
     private VisitInputGUI visitInputGUI;
     
     private JComboBox patientInputCombo = new JComboBox();
-    private String patientComboBoxItems[] = {patientInputStr, patientADInputStr};
+    private String patientComboBoxItems[] = {patientInputStr, patientADInputStr, 
+        patientConditionInputStr};
 //    JComboBox cb = new JComboBox(patientComboBoxItems);
     
     public JPanel createPatientSearchPanel()
@@ -299,22 +303,38 @@ public class MedicalDBUI
         
         patientInputGUI = new PatientInputGUI(medicalClinicDB);
         patientADInputGUI = new PatientADInputGUI(medicalClinicDB);
+        patientConditionInputGUI = new PatientConditionInputGUI
+        (medicalClinicDB);
         visitInputGUI = new VisitInputGUI(medicalClinicDB);
         
         JFrame medicalDBUIFrame = new JFrame();
         JPanel patientInputPanel = patientInputGUI.createPatientInputPanel();
         JPanel patientADInputPanel = patientADInputGUI.
                 createInputPanel();
+        JPanel patientConditionInputPanel = patientConditionInputGUI.
+                createInputPanel();
         JPanel patientSearchPanel = createPatientSearchPanel();
         JPanel visitInputPanel = visitInputGUI.createVisitInputPanel();
 
-        //Create the panel that contains the "patientInputPanels".
+        // Creates and adds panels panels for patient inputs
         patientInputPanels = new JPanel(new CardLayout());
         patientInputPanels.add(patientInputPanel, patientInputStr);
         patientInputPanels.add(patientADInputPanel, patientADInputStr);
+        patientInputPanels.add(patientConditionInputPanel, 
+                patientConditionInputStr);
                
         patientInputTabP.add(patientInputPanels);
         patientInputTabP.add(patientInputComboP,BorderLayout.PAGE_END);
+        
+        // Creates and adds panels for visit inputs
+//        patientInputPanels = new JPanel(new CardLayout());
+//        patientInputPanels.add(patientInputPanel, patientInputStr);
+//        patientInputPanels.add(patientADInputPanel, patientADInputStr);
+//        patientInputPanels.add(patientConditionInputPanel, 
+//                patientConditionInputStr);
+//               
+//        patientInputTabP.add(patientInputPanels);
+//        patientInputTabP.add(patientInputComboP,BorderLayout.PAGE_END);
 
         medicalDBUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         

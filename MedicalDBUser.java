@@ -1,6 +1,7 @@
 package MedicalClinicDB;
 
 
+import .*;
 import java.sql.SQLException;
 
 /*

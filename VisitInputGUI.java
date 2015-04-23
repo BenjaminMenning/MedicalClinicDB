@@ -1,6 +1,7 @@
 package MedicalClinicDB;
 
 
+import .*;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -90,7 +91,7 @@ public class VisitInputGUI
     public JPanel createVisitInputPanel()
     {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(8,1)); 
+        panel.setLayout(new GridLayout(10,1)); 
         
         visitIDL = new JLabel(visitIDStr, SwingConstants.LEFT);
         visitNumberL = new JLabel(visitNumberStr, SwingConstants.LEFT);

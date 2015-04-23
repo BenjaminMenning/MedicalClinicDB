@@ -1,11 +1,13 @@
 package MedicalClinicDB;
 
+import .*;
 import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
  
 public class MedicalClinicDB 
@@ -21,9 +23,13 @@ public class MedicalClinicDB
     private String patientIDQuery = "SELECT patientID \nFROM Patient";
     private String assisDevIDQuery = "SELECT assistiveDeviceID "
             + "\nFROM AssistiveDevice";
-    private String conditionIDQuery = "SELECT conditionID \nFROM Condition";
+    private String conditionIDQuery = "SELECT conditionID \nFROM `Condition`";
     private String providerIDQuery = "SELECT healthcareProviderID "
             + "\nFROM HealthcareProvider";
+    
+    private String invalidCNStr =  "";
+    private String invalidADStr = "Invalid assistive device entered. Please "
+            + "enter an assistive device that is listed under the suggestions.";
     private int queryCriteriaCount = 0;
     private Connection connection = null;
     
@@ -107,9 +113,10 @@ public class MedicalClinicDB
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
         }
-        catch (SQLException e ) 
+        catch (SQLException e) 
         {
-            System.out.println(e);
+                JOptionPane.showMessageDialog(null, invalidADStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
         } 
         finally 
         {
@@ -261,7 +268,8 @@ public class MedicalClinicDB
         stmt = connection.createStatement();
         String conditionID = "";
         String conditionNameStr = "'" + conditionName + "'";
-        String query = conditionIDQuery + conditionNameStr;
+        String query = conditionIDQuery + "\nWHERE conditionName = " + 
+                conditionNameStr;
         ResultSet rs = stmt.executeQuery(query);
         if (!rs.next())
         {
@@ -278,6 +286,7 @@ public class MedicalClinicDB
     public ArrayList<String> getClinicNumberList() throws SQLException
     {
         ArrayList<String> clinicNumberList = new ArrayList<String>();
+        clinicNumberList.add("");
         Statement stmt = null;
         String query = "SELECT *\nFROM Patient";
         try 
@@ -303,17 +312,18 @@ public class MedicalClinicDB
     
     public ArrayList<String> getADList() throws SQLException
     {
-        ArrayList<String> clinicNumberList = new ArrayList<String>();
+        ArrayList<String> assisDevList = new ArrayList<String>();
+        assisDevList.add("");
         Statement stmt = null;
-        String query = "SELECT *\nFROM Patient";
+        String query = "SELECT *\nFROM AssistiveDevice";
         try 
         {
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) 
             {
-                String clinicNumber = rs.getString("clinicNumber");
-                clinicNumberList.add(clinicNumber);
+                String assistiveDevice = rs.getString("assistiveDeviceName");
+                assisDevList.add(assistiveDevice);
             }
         } 
         catch (SQLException e ) 
@@ -324,7 +334,35 @@ public class MedicalClinicDB
         {
             if (stmt != null) { stmt.close(); }
         }    
-        return clinicNumberList;
+        return assisDevList;
+    }
+    
+    public ArrayList<String> getConditionList() throws SQLException
+    {
+        ArrayList<String> conditionList = new ArrayList<String>();
+        conditionList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM `Condition`";
+        System.out.println(query);
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String condition = rs.getString("conditionName");
+                conditionList.add(condition);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return conditionList;
     }
     
     public void search() throws SQLException
