@@ -23,12 +23,12 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * Assignment:      Database Project
  * 
  * Description:     This program is a medical database program that utilizes a
- *                  MySQL relational database management system to allow users
+ *                  MySQL relational database management treatment to allow users
  *                  to input and view information about patients and visits.
  *                  It allows users to input information on a wide variety of 
  *                  things, including patient conditions and assistive devices,
  *                  visit diagnoses and studies, as well as information about
- *                  healthcare providers or systems used. It also allows a user
+ *                  healthcare providers or treatments used. It also allows a user
  *                  to search and lookup information about patients based on a
  *                  wide variety of criteria like name, diagnoses, date of birth
  *                  and more. It also allows users to see more detailed 
@@ -37,49 +37,49 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /** 
  * This class extends the VisitMiscInputGUI class and allows a user to 
- * enter an study for a patient.
+ * enter an treatment for a patient.
  * 
  * @author Benjamin Menning, Dan Johnson, Holly Schreader
  * @version 05/05/2015 
  */
-public class VisitStudyInputGUI extends VisitMiscInputGUI
+public class VisitTreatmentInputGUI extends VisitMiscInputGUI
 {
     // JLabel variables
-    private JLabel studyL;
+    private JLabel treatmentL;
         
     // String and ArrayList of string variables for studies
-    private String studyStr = "Study:";
-    private ArrayList<String> studyList;
+    private String treatmentStr = "Treatment:";
+    private ArrayList<String> treatmentList;
     
     // JTextField varables
-    private JComboBox studyCB;                                    
+    private JComboBox treatmentCB;                                    
     
     // JButton variables
-    private JButton addStudyB;
+    private JButton addTreatmentB;
     
     // Button handler
-    private addStudyButtonHandler addStudyH;
+    private addTreatmentButtonHandler addTreatmentH;
                                 
     // JPanel variables
-    private JPanel studyP;
-    private JPanel addStudyButtonP;
+    private JPanel treatmentP;
+    private JPanel addTreatmentButtonP;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
-     * database for the study input GUI.
+     * database for the treatment input GUI.
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public VisitStudyInputGUI(MedicalClinicDB medicalClinicObj)
+    public VisitTreatmentInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
     }
     
     /**
-     * This method creates and retrieves the components for an study 
+     * This method creates and retrieves the components for an treatment 
      * input panel.
      * 
-     * @return JPanel   returns the JPanel containing study components
+     * @return JPanel   returns the JPanel containing treatment components
      * @throws SQLException if SQL database encounters an error
      */
     @Override
@@ -88,35 +88,35 @@ public class VisitStudyInputGUI extends VisitMiscInputGUI
         // Call superclass
         super.createInputPanel();
 
-        // Assign study label for field
-        studyL = new JLabel(studyStr, SwingConstants.LEFT);
+        // Assign treatment label for field
+        treatmentL = new JLabel(treatmentStr, SwingConstants.LEFT);
 
-        // Assign study list from database
-        studyList = medicalClinicDB.getStudyList();
+        // Assign treatment list from database
+        treatmentList = medicalClinicDB.getTreatmentList();
         
-        // Assign study combo box information and adds list 
+        // Assign treatment combo box information and adds list 
         // information
-        studyCB = new JComboBox(studyList.toArray());
-        studyCB.setEditable(true);
-        AutoCompleteDecorator.decorate(studyCB);
+        treatmentCB = new JComboBox(treatmentList.toArray());
+        treatmentCB.setEditable(true);
+        AutoCompleteDecorator.decorate(treatmentCB);
         
-        // Assign add study button and button handler
-        addStudyB = new JButton("Add Visit Study");
-        addStudyH = new addStudyButtonHandler();
-        addStudyB.addActionListener(addStudyH);
+        // Assign add treatment button and button handler
+        addTreatmentB = new JButton("Add Visit Treatment");
+        addTreatmentH = new addTreatmentButtonHandler();
+        addTreatmentB.addActionListener(addTreatmentH);
         
         // Assign panel for add button
-        addStudyButtonP = new JPanel();
-        addStudyButtonP.add(addStudyB);
+        addTreatmentButtonP = new JPanel();
+        addTreatmentButtonP.add(addTreatmentB);
         
-        // Assign study panel components
-        studyP = new JPanel();
-        studyP.add(studyL);
-        studyP.add(studyCB);
+        // Assign treatment panel components
+        treatmentP = new JPanel();
+        treatmentP.add(treatmentL);
+        treatmentP.add(treatmentCB);
         
-        // Add study panels to base panel and return final panel
-        basePanel.add(studyP);
-        basePanel.add(addStudyButtonP);
+        // Add treatment panels to base panel and return final panel
+        basePanel.add(treatmentP);
+        basePanel.add(addTreatmentButtonP);
         return basePanel;
     }
     
@@ -128,35 +128,35 @@ public class VisitStudyInputGUI extends VisitMiscInputGUI
     public void clearFields()
     {
         super.clearFields();
-        studyCB.setSelectedItem("");
+        treatmentCB.setSelectedItem("");
     }
         
     /** 
-     * This class performs the action of adding an study by pressing
+     * This class performs the action of adding an treatment by pressing
      * a button.
      * 
      * @author Benjamin Menning, Dan Johnson, Holly Schreader
      * @version 05/05/2015
      */
-    private class addStudyButtonHandler implements ActionListener
+    private class addTreatmentButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             String visitNumber = visitNumberCB.getSelectedItem().toString();
-            String study = studyCB.getSelectedItem().toString();
+            String treatment = treatmentCB.getSelectedItem().toString();
             try 
             {
                 String visitID = medicalClinicDB.determineVisitID(
                         visitNumber);
-                String studyID = medicalClinicDB.
-                        determineStudyID(study);
-                medicalClinicDB.addVisitStudy(null, 
-                        visitID, studyID);
+                String treatmentID = medicalClinicDB.
+                        determineTreatmentID(treatment);
+                medicalClinicDB.addVisitTreatment(null, 
+                        visitID, treatmentID);
                 clearFields();
             } 
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitStudyInputGUI.class.getName()).
+                Logger.getLogger(VisitTreatmentInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

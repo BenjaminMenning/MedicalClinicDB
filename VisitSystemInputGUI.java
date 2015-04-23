@@ -37,49 +37,49 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /** 
  * This class extends the VisitMiscInputGUI class and allows a user to 
- * enter an study for a patient.
+ * enter an system for a patient.
  * 
  * @author Benjamin Menning, Dan Johnson, Holly Schreader
  * @version 05/05/2015 
  */
-public class VisitStudyInputGUI extends VisitMiscInputGUI
+public class VisitSystemInputGUI extends VisitMiscInputGUI
 {
     // JLabel variables
-    private JLabel studyL;
+    private JLabel systemL;
         
     // String and ArrayList of string variables for studies
-    private String studyStr = "Study:";
-    private ArrayList<String> studyList;
+    private String systemStr = "System:";
+    private ArrayList<String> systemList;
     
     // JTextField varables
-    private JComboBox studyCB;                                    
+    private JComboBox systemCB;                                    
     
     // JButton variables
-    private JButton addStudyB;
+    private JButton addSystemB;
     
     // Button handler
-    private addStudyButtonHandler addStudyH;
+    private addSystemButtonHandler addSystemH;
                                 
     // JPanel variables
-    private JPanel studyP;
-    private JPanel addStudyButtonP;
+    private JPanel systemP;
+    private JPanel addSystemButtonP;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
-     * database for the study input GUI.
+     * database for the system input GUI.
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public VisitStudyInputGUI(MedicalClinicDB medicalClinicObj)
+    public VisitSystemInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
     }
     
     /**
-     * This method creates and retrieves the components for an study 
+     * This method creates and retrieves the components for an system 
      * input panel.
      * 
-     * @return JPanel   returns the JPanel containing study components
+     * @return JPanel   returns the JPanel containing system components
      * @throws SQLException if SQL database encounters an error
      */
     @Override
@@ -88,35 +88,35 @@ public class VisitStudyInputGUI extends VisitMiscInputGUI
         // Call superclass
         super.createInputPanel();
 
-        // Assign study label for field
-        studyL = new JLabel(studyStr, SwingConstants.LEFT);
+        // Assign system label for field
+        systemL = new JLabel(systemStr, SwingConstants.LEFT);
 
-        // Assign study list from database
-        studyList = medicalClinicDB.getStudyList();
+        // Assign system list from database
+        systemList = medicalClinicDB.getSystemList();
         
-        // Assign study combo box information and adds list 
+        // Assign system combo box information and adds list 
         // information
-        studyCB = new JComboBox(studyList.toArray());
-        studyCB.setEditable(true);
-        AutoCompleteDecorator.decorate(studyCB);
+        systemCB = new JComboBox(systemList.toArray());
+        systemCB.setEditable(true);
+        AutoCompleteDecorator.decorate(systemCB);
         
-        // Assign add study button and button handler
-        addStudyB = new JButton("Add Visit Study");
-        addStudyH = new addStudyButtonHandler();
-        addStudyB.addActionListener(addStudyH);
+        // Assign add system button and button handler
+        addSystemB = new JButton("Add Visit System");
+        addSystemH = new addSystemButtonHandler();
+        addSystemB.addActionListener(addSystemH);
         
         // Assign panel for add button
-        addStudyButtonP = new JPanel();
-        addStudyButtonP.add(addStudyB);
+        addSystemButtonP = new JPanel();
+        addSystemButtonP.add(addSystemB);
         
-        // Assign study panel components
-        studyP = new JPanel();
-        studyP.add(studyL);
-        studyP.add(studyCB);
+        // Assign system panel components
+        systemP = new JPanel();
+        systemP.add(systemL);
+        systemP.add(systemCB);
         
-        // Add study panels to base panel and return final panel
-        basePanel.add(studyP);
-        basePanel.add(addStudyButtonP);
+        // Add system panels to base panel and return final panel
+        basePanel.add(systemP);
+        basePanel.add(addSystemButtonP);
         return basePanel;
     }
     
@@ -128,35 +128,35 @@ public class VisitStudyInputGUI extends VisitMiscInputGUI
     public void clearFields()
     {
         super.clearFields();
-        studyCB.setSelectedItem("");
+        systemCB.setSelectedItem("");
     }
         
     /** 
-     * This class performs the action of adding an study by pressing
+     * This class performs the action of adding an system by pressing
      * a button.
      * 
      * @author Benjamin Menning, Dan Johnson, Holly Schreader
      * @version 05/05/2015
      */
-    private class addStudyButtonHandler implements ActionListener
+    private class addSystemButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             String visitNumber = visitNumberCB.getSelectedItem().toString();
-            String study = studyCB.getSelectedItem().toString();
+            String system = systemCB.getSelectedItem().toString();
             try 
             {
                 String visitID = medicalClinicDB.determineVisitID(
                         visitNumber);
-                String studyID = medicalClinicDB.
-                        determineStudyID(study);
-                medicalClinicDB.addVisitStudy(null, 
-                        visitID, studyID);
+                String systemID = medicalClinicDB.
+                        determineSystemID(system);
+                medicalClinicDB.addVisitSystem(null, 
+                        visitID, systemID);
                 clearFields();
             } 
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitStudyInputGUI.class.getName()).
+                Logger.getLogger(VisitSystemInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

@@ -52,6 +52,8 @@ public class MedicalDBUI
     private JPanel visitInputComboP;
     private JPanel visitInputPanel;
     private JPanel visitStudyInputPanel;
+    private JPanel visitSystemInputPanel;
+    private JPanel visitTreatmentInputPanel;
     private JPanel visitInputPanels;
     private JPanel visitInputTabP;
     
@@ -63,13 +65,16 @@ public class MedicalDBUI
     private PatientConditionInputGUI patientConditionInputGUI;
     private VisitInputGUI visitInputGUI;
     private VisitStudyInputGUI visitStudyInputGUI;
+    private VisitSystemInputGUI visitSystemInputGUI;
+    private VisitTreatmentInputGUI visitTreatmentInputGUI;
     
     private JComboBox patientInputCombo = new JComboBox();
     private String patientComboBoxItems[] = {patientInputStr, patientADInputStr, 
         patientConditionInputStr};
     
     private JComboBox visitInputCombo = new JComboBox();
-    private String visitComboBoxItems[] = {visitInputStr, visitStudyInputStr};
+    private String visitComboBoxItems[] = {visitInputStr, visitStudyInputStr, 
+        visitSystemInputStr, visitTreatmentInputStr};
     
 //    private class changePatientInputPanelHandler implements ActionListener
 //    {
@@ -130,6 +135,8 @@ public class MedicalDBUI
         (medicalClinicDB);
         visitInputGUI = new VisitInputGUI(medicalClinicDB);
         visitStudyInputGUI = new VisitStudyInputGUI(medicalClinicDB);
+        visitSystemInputGUI = new VisitSystemInputGUI(medicalClinicDB);
+        visitTreatmentInputGUI = new VisitTreatmentInputGUI(medicalClinicDB);
         
         JFrame medicalDBUIFrame = new JFrame();
         patientInputPanel = patientInputGUI.createPatientInputPanel();
@@ -139,6 +146,8 @@ public class MedicalDBUI
                 createInputPanel();
         visitInputPanel = visitInputGUI.createVisitInputPanel();
         visitStudyInputPanel = visitStudyInputGUI.createInputPanel();
+        visitSystemInputPanel = visitSystemInputGUI.createInputPanel();
+        visitTreatmentInputPanel = visitTreatmentInputGUI.createInputPanel();
 
         // Creates and adds panels for patient inputs
         patientInputPanels = new JPanel(new CardLayout());
@@ -154,6 +163,8 @@ public class MedicalDBUI
         visitInputPanels = new JPanel(new CardLayout());
         visitInputPanels.add(visitInputPanel, visitInputStr);
         visitInputPanels.add(visitStudyInputPanel, visitStudyInputStr);
+        visitInputPanels.add(visitSystemInputPanel, visitSystemInputStr);
+        visitInputPanels.add(visitTreatmentInputPanel, visitTreatmentInputStr);
                
         visitInputTabP.add(visitInputPanels);
         visitInputTabP.add(visitInputComboP,BorderLayout.PAGE_END);
