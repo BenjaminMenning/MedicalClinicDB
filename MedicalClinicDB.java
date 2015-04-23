@@ -19,11 +19,13 @@ public class MedicalClinicDB
     private String basePatientQuery = "SELECT * \nFROM Patient";
     private String baseVisitQuery = "SELECT * \nFROM Visit";
     private String patientIDQuery = "SELECT patientID \nFROM Patient";
+    private String visitIDQuery = "SELECT visitID \nFROM Visit";
     private String assisDevIDQuery = "SELECT assistiveDeviceID "
             + "\nFROM AssistiveDevice";
     private String conditionIDQuery = "SELECT conditionID \nFROM `Condition`";
     private String providerIDQuery = "SELECT healthcareProviderID "
             + "\nFROM HealthcareProvider";
+    private String studyIDQuery = "SELECT studyID \nFROM Study";
     
     private String invalidCNStr =  "";
     private String invalidADStr = "Invalid assistive device entered. Please "
@@ -216,6 +218,33 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    public void addVisitStudy(String visitStudyID, String visitID,
+            String studyID) throws SQLException
+    {
+        String visitStudyIDStr = visitStudyID;
+        String visitIDStr = visitID;
+        String studyIDStr = studyID;
+        Statement stmt = null;
+        String query = "CALL addVisitStudy(" + 
+                visitStudyIDStr + ", " + 
+                visitIDStr + ", " +
+                studyIDStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
     public String determinePatientID(String clinicNum) throws SQLException
     {
         Statement stmt = null;
@@ -235,6 +264,27 @@ public class MedicalClinicDB
           patientID = rs.getString("patientID");
         }    
         return patientID;
+    }
+
+    public String determineVisitID(String visitNum) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String visitID = "";
+        String visitNumStr = "'" + visitNum + "'";
+        String query = visitIDQuery + "\nWHERE visitNumber = " + visitNumStr;
+        System.out.println(query);
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          visitID = rs.getString("visitID");
+        }    
+        return visitID;
     }
     
     public String determineAssistiveDeviceID(String assisDevName) throws 
@@ -279,6 +329,27 @@ public class MedicalClinicDB
           conditionID = rs.getString("conditionID");
         }    
         return conditionID;
+    }
+    
+    public String determineStudyID(String typeOfStudy) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String studyID = "";
+        String typeOfStudyStr = "'" + typeOfStudy + "'";
+        String query = studyIDQuery + "\nWHERE typeOfStudy = " + 
+                typeOfStudyStr;
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          studyID = rs.getString("studyID");
+        }    
+        return studyID;
     }
     
     public ArrayList<String> getClinicNumberList() throws SQLException
@@ -361,6 +432,60 @@ public class MedicalClinicDB
             if (stmt != null) { stmt.close(); }
         }    
         return conditionList;
+    }
+    
+    public ArrayList<String> getVisitNumberList() throws SQLException
+    {
+        ArrayList<String> visitNumberList = new ArrayList<String>();
+        visitNumberList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM Visit";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String visitNumber = rs.getString("visitNumber");
+                visitNumberList.add(visitNumber);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return visitNumberList;
+    }
+    
+    public ArrayList<String> getStudyList() throws SQLException
+    {
+        ArrayList<String> studyList = new ArrayList<String>();
+        studyList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM Study";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String study = rs.getString("typeOfStudy");
+                studyList.add(study);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return studyList;
     }
     
     public void search() throws SQLException
@@ -475,7 +600,8 @@ public class MedicalClinicDB
                 String birthDate = rs.getString("birthDate");
 //                String height = rs.getString("height");
 //                String weight = rs.getString("weight");
-                Object[][] data = {{"0-000-000","Testy","McTester","T","William Williamson","01/01/1978"}};
+                Object[][] data = {{"0-000-000","Testy","McTester","T",
+                    "William Williamson","01/01/1978"}};
             }
         } 
         catch (SQLException e ) 
@@ -488,14 +614,14 @@ public class MedicalClinicDB
         }    
     }
  
-    public static void main(String[] argv) throws SQLException 
-    {
-      MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
-      medicalClinicDB.connectToDatabase();
-      medicalClinicDB.determinePatientID("8-765-452");
-      ArrayList<String> poopList = new ArrayList<String>();
-      poopList = medicalClinicDB.getClinicNumberList();
-      
+//    public static void main(String[] argv) throws SQLException 
+//    {
+//      MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
+//      medicalClinicDB.connectToDatabase();
+//      medicalClinicDB.determinePatientID("8-765-452");
+//      ArrayList<String> poopList = new ArrayList<String>();
+//      poopList = medicalClinicDB.getClinicNumberList();
+//      
 //      medicalClinicDB.searchPatient();
 //      medicalClinicDB.searchFirstName("John");
 //      medicalClinicDB.searchMiddleName("William");
@@ -508,5 +634,5 @@ public class MedicalClinicDB
 //      medicalClinicDB.addPatientCondition("500", "500", "500");
 //      medicalClinicDB.addPatientHealthcareProvider("500", "500", "500", "Primary");
 //      medicalClinicDB.testQuery();
-    }
+//    }
 }
