@@ -26,7 +26,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  *                  MySQL relational database management system to allow users
  *                  to input and view information about patients and visits.
  *                  It allows users to input information on a wide variety of 
- *                  things, including patient conditions and conditions,
+ *                  things, including patient conditions and assistive devices,
  *                  visit diagnoses and studies, as well as information about
  *                  healthcare providers or systems used. It also allows a user
  *                  to search and lookup information about patients based on a

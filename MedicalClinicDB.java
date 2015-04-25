@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
  
 public class MedicalClinicDB 
@@ -222,6 +223,60 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    public void addVisitDiagnosis(String visitDiagnosisID, String visitID,
+            String diagnosisID) throws SQLException
+    {
+        String visitDiagnosisIDStr = visitDiagnosisID;
+        String visitIDStr = visitID;
+        String diagnosisIDStr = diagnosisID;
+        Statement stmt = null;
+        String query = "CALL addVisitDiagnosis(" + 
+                visitDiagnosisIDStr + ", " + 
+                visitIDStr + ", " +
+                diagnosisIDStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addVisitFile(String visitFileID, String visitID, String fileID) 
+            throws SQLException
+    {
+        String visitFileIDStr = visitFileID;
+        String visitIDStr = visitID;
+        String fileIDStr = fileID;
+        Statement stmt = null;
+        String query = "CALL addVisitFile(" + 
+                visitFileIDStr + ", " +
+                visitIDStr + ", " +
+                fileIDStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
     public void addVisitStudy(String visitStudyID, String visitID,
             String studyID) throws SQLException
     {
@@ -248,18 +303,18 @@ public class MedicalClinicDB
         }    
         System.out.println(query);
     }
-    
-    public void addVisitFile(String visitFileID, String visitID,
-            String fileID) throws SQLException
+        
+    public void addVisitSystem(String visitSystemID, String visitID,
+            String systemID) throws SQLException
     {
-        String visitFileIDStr = visitFileID;
+        String visitSystemIDStr = visitSystemID;
         String visitIDStr = visitID;
-        String fileIDStr = fileID;
+        String systemIDStr = systemID;
         Statement stmt = null;
-        String query = "CALL addVisitFile(" + 
-                visitFileIDStr + ", " + 
+        String query = "CALL addVisitSystem(" + 
+                visitSystemIDStr + ", " + 
                 visitIDStr + ", " +
-                fileIDStr + ")";
+                systemIDStr + ")";
         try 
         {
             stmt = connection.createStatement();
@@ -275,18 +330,24 @@ public class MedicalClinicDB
         }    
         System.out.println(query);
     }
-    
-    public void addVisitSystem(String visitSystemID, String visitID,
-            String systemID) throws SQLException
+
+    public void addVisitTestResults(String visitID, String testResults1,
+            String testResults2, String testResults3, String testResults4) 
+            throws SQLException
     {
-        String visitSystemIDStr = visitSystemID;
         String visitIDStr = visitID;
-        String systemIDStr = systemID;
+        String testResults1Str = "'" + testResults1 + "'";
+        String testResults2Str = "'" + testResults2 + "'";
+        String testResults3Str = "'" + testResults3 + "'";
+        String testResults4Str = "'" + testResults4 + "'";
         Statement stmt = null;
-        String query = "CALL addVisitSystem(" + 
-                visitSystemIDStr + ", " + 
+        String query = "CALL addTestResults(" + 
+                null + ", " + 
                 visitIDStr + ", " +
-                systemIDStr + ")";
+                testResults1Str + ", " +
+                testResults2Str + ", " +
+                testResults3Str + ", " +
+                testResults4Str + ")";
         try 
         {
             stmt = connection.createStatement();
@@ -329,6 +390,189 @@ public class MedicalClinicDB
         }    
         System.out.println(query);
     }
+
+    public void addAssistiveDevice(String assistiveDeviceID, String 
+            assistiveDeviceName) 
+            throws SQLException
+    {
+        String assistiveDeviceIDStr = assistiveDeviceID;
+        String assistiveDeviceNameStr = "'" + assistiveDeviceName + "'";
+        Statement stmt = null;
+        String query = "CALL addAssistiveDevice(" + 
+                assistiveDeviceIDStr + ", " +
+                assistiveDeviceNameStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addCondition(String conditionID, String conditionName) 
+            throws SQLException
+    {
+        String conditionIDStr = conditionID;
+        String conditionNameStr = "'" + conditionName + "'";
+        Statement stmt = null;
+        String query = "CALL addCondition(" + 
+                conditionIDStr + ", " +
+                conditionNameStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addFile(String fileID, String fileName, String patientID) 
+            throws SQLException
+    {
+        String fileIDStr = fileID;
+        String fileNameStr = "'" + fileName + "'";
+        String patientIDStr = patientID;
+        Statement stmt = null;
+        String query = "CALL addFile(" + 
+                fileIDStr + ", " +
+                fileNameStr + ", " +
+                patientIDStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addHealthcareProvider(String healthcareProviderID, String 
+            firstName, String middleName, String lastName) 
+            throws SQLException
+    {
+        String healthcareProviderIDStr = healthcareProviderID;
+        String firstNameStr = "'" + firstName + "'";
+        String middleNameStr = "'" + middleName + "'";
+        String lastNameStr = "'" + lastName + "'";
+        Statement stmt = null;
+        String query = "CALL addHealthcareProvider(" + 
+                healthcareProviderIDStr + ", " +
+                firstNameStr + ", " +
+                middleNameStr + ", " +
+                lastNameStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addStudy(String studyID, String typeOfStudy) 
+            throws SQLException
+    {
+        String studyIDStr = studyID;
+        String typeOfStudyStr = "'" + typeOfStudy + "'";
+        Statement stmt = null;
+        String query = "CALL addStudy(" + 
+                studyIDStr + ", " +
+                typeOfStudyStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addSystem(String systemID, String systemUsed) 
+            throws SQLException
+    {
+        String systemIDStr = systemID;
+        String systemUsedStr = "'" + systemUsed + "'";
+        Statement stmt = null;
+        String query = "CALL addSystem(" + 
+                systemIDStr + ", " +
+                systemUsedStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addTreatment(String treatmentID, String treatmentName) 
+            throws SQLException
+    {
+        String treatmentIDStr = treatmentID;
+        String treatmentNameStr = "'" + treatmentName + "'";
+        Statement stmt = null;
+        String query = "CALL addTreatment(" + 
+                treatmentIDStr + ", " +
+                treatmentNameStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
     
     public String determinePatientID(String clinicNum) throws SQLException
     {
@@ -351,6 +595,28 @@ public class MedicalClinicDB
         return patientID;
     }
 
+    public String determinePatientIDVisit(String visitNum) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String patientID = "";
+        String visitNumStr = "'" + visitNum + "'";
+        String query = patientIDQuery + "\nRIGHT JOIN Visit\nUSING (patientID)"
+                + "\nWHERE visitNumber = " + visitNumStr;
+        System.out.println(query);
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          patientID = rs.getString("patientID");
+        }    
+        return patientID;
+    }
+    
     public String determineVisitID(String visitNum) throws SQLException
     {
         Statement stmt = null;
@@ -415,6 +681,53 @@ public class MedicalClinicDB
         }    
         return conditionID;
     }
+
+    public String determineHCPID(String providerName) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String providerID = "";
+        String providerNameStr = "'" + providerName + "'";
+        Scanner sc = new Scanner(providerName);
+        String firstNameStr = "'" + sc.next() + "'";
+        String middleNameStr = "'" + sc.next() + "'";
+        String lastNameStr = "'" + sc.next() + "'";
+        String query = providerIDQuery + "\nWHERE firstName = " + firstNameStr +
+                "\nAND middleName = " + middleNameStr + "\nAND lastName = " + 
+                lastNameStr;
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          providerID = rs.getString("healthcareProviderID");
+        }    
+        return providerID;
+    }
+    
+    public String determineFileID(String fileName) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String fileID = "";
+        String fileNameStr = "'" + fileName + "'";
+        String query = fileIDQuery + "\nWHERE fileName = " + 
+                fileNameStr;
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          fileID = rs.getString("fileID");
+        }    
+        return fileID;
+    }
     
     public String determineStudyID(String typeOfStudy) throws SQLException
     {
@@ -435,6 +748,29 @@ public class MedicalClinicDB
           studyID = rs.getString("studyID");
         }    
         return studyID;
+    }
+    
+    public String determineDiagnosisID(String icd9Description) throws 
+            SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String diagnosisID = "";
+        String icd9DescriptionStr = "'" + icd9Description + "'";
+        String query = diagnosisIDQuery + "\nRIGHT JOIN ICD9Diagnosis"
+                + "\nUSING (icd9DiagnosisID)\nWHERE icd9Description = " + 
+                icd9DescriptionStr;
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          diagnosisID = rs.getString("diagnosisID");
+        }    
+        return diagnosisID;
     }
     
     public String determineSystemID(String systemUsed) throws SQLException
@@ -561,6 +897,37 @@ public class MedicalClinicDB
         return conditionList;
     }
     
+    public ArrayList<String> getHCPList() throws SQLException
+    {
+        ArrayList<String> healthcareProviderList = new ArrayList<String>();
+        healthcareProviderList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM `HealthcareProvider`";
+        System.out.println(query);
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String firstName = rs.getString("firstName");
+                String middleName = rs.getString("middleName");
+                String lastName = rs.getString("lastName");
+                String fullName = firstName + " " + middleName + " " + lastName;
+                healthcareProviderList.add(fullName);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return healthcareProviderList;
+    }
+    
     public ArrayList<String> getVisitNumberList() throws SQLException
     {
         ArrayList<String> visitNumberList = new ArrayList<String>();
@@ -613,6 +980,33 @@ public class MedicalClinicDB
             if (stmt != null) { stmt.close(); }
         }    
         return studyList;
+    }
+    
+    public ArrayList<String> getDiagnosisList() throws SQLException
+    {
+        ArrayList<String> diagnosisList = new ArrayList<String>();
+        diagnosisList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM ICD9Diagnosis";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String diagnosis = rs.getString("icd9Description");
+                diagnosisList.add(diagnosis);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return diagnosisList;
     }
     
     public ArrayList<String> getSystemList() throws SQLException

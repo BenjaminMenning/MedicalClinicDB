@@ -37,7 +37,15 @@ public class MedicalDBUI
     private String visitFileInputStr = "Add a Visit File";
     private String visitStudyInputStr = "Add a Visit Study";
     private String visitSystemInputStr = "Add a Visit System";
+    private String visitTRInputStr = "Add Visit Test Results";
     private String visitTreatmentInputStr = "Add a Visit Treatment";
+    
+    private String assisDevInputStr = "Add a Assistive Device";
+    private String conditionInputStr = "Add a Condition";
+    private String healthcareProviderInputStr = "Add a Healthcare Provider";
+    private String studyInputStr = "Add a Study";
+    private String systemInputStr = "Add a System";
+    private String treatmentInputStr = "Add a Treatment";
         
 //    private changePatientInputPanelHandler changePatientPanelH;
                         
@@ -46,16 +54,31 @@ public class MedicalDBUI
     private JPanel patientInputPanel;
     private JPanel patientADInputPanel;
     private JPanel patientConditionInputPanel;
+    private JPanel patientHCPInputPanel;
     private JPanel patientSearchPanel;
     private JPanel patientInputPanels;
     private JPanel patientInputTabP;
+    
     private JPanel visitInputComboP;
     private JPanel visitInputPanel;
+    private JPanel visitDiagnosisInputPanel;
+    private JPanel visitFileInputPanel;
     private JPanel visitStudyInputPanel;
     private JPanel visitSystemInputPanel;
+    private JPanel visitTRInputPanel;
     private JPanel visitTreatmentInputPanel;
     private JPanel visitInputPanels;
     private JPanel visitInputTabP;
+    
+    private JPanel miscInputComboP;
+    private JPanel assisDevInputPanel;
+    private JPanel conditionInputPanel;
+    private JPanel healthcareProviderInputPanel;
+    private JPanel studyInputPanel;
+    private JPanel systemInputPanel;
+    private JPanel treatmentInputPanel;
+    private JPanel miscInputPanels;
+    private JPanel miscInputTabP;
     
     private JFrame medicalDBUIFrame;
         
@@ -63,18 +86,31 @@ public class MedicalDBUI
     private PatientInputGUI patientInputGUI;
     private PatientADInputGUI patientADInputGUI;
     private PatientConditionInputGUI patientConditionInputGUI;
+    private PatientHCPInputGUI patientHCPInputGUI;
+    
     private VisitInputGUI visitInputGUI;
+    private VisitFileInputGUI visitFileInputGUI;
+    private VisitDiagnosisInputGUI visitDiagnosisInputGUI;
     private VisitStudyInputGUI visitStudyInputGUI;
     private VisitSystemInputGUI visitSystemInputGUI;
+    private VisitTRInputGUI visitTRInputGUI;
     private VisitTreatmentInputGUI visitTreatmentInputGUI;
+    
+    private ADInputGUI assisDevInputGUI;
     
     private JComboBox patientInputCombo = new JComboBox();
     private String patientComboBoxItems[] = {patientInputStr, patientADInputStr, 
-        patientConditionInputStr};
+        patientConditionInputStr, patientHCPInputStr};
     
     private JComboBox visitInputCombo = new JComboBox();
-    private String visitComboBoxItems[] = {visitInputStr, visitStudyInputStr, 
-        visitSystemInputStr, visitTreatmentInputStr};
+    private String visitComboBoxItems[] = {visitInputStr, visitFileInputStr,
+        visitDiagnosisInputStr, visitStudyInputStr, visitSystemInputStr, 
+        visitTRInputStr, visitTreatmentInputStr};
+    
+    private JComboBox miscInputCombo = new JComboBox();
+    private String miscComboBoxItems[] = {assisDevInputStr, 
+        conditionInputStr, healthcareProviderInputStr, studyInputStr, 
+        systemInputStr, treatmentInputStr};
     
 //    private class changePatientInputPanelHandler implements ActionListener
 //    {
@@ -96,6 +132,8 @@ public class MedicalDBUI
         patientInputTabP.setLayout(new BorderLayout());   
         visitInputTabP = new JPanel();
         visitInputTabP.setLayout(new BorderLayout());
+        miscInputTabP = new JPanel();
+        miscInputTabP.setLayout(new BorderLayout());
         
         patientInputCombo = new JComboBox(patientComboBoxItems);
         patientInputCombo.setEditable(false);
@@ -128,15 +166,38 @@ public class MedicalDBUI
         });
         visitInputComboP = new JPanel();
         visitInputComboP.add(visitInputCombo);   
+
+        miscInputCombo = new JComboBox(miscComboBoxItems);
+        miscInputCombo.setEditable(false);
+//        miscInputCombo.addActionListener(changePatientPanelH);
+        miscInputCombo.addActionListener(new ActionListener() 
+        {
+            @Override
+            public void actionPerformed(ActionEvent e) 
+            {
+                JComboBox jcb = (JComboBox) e.getSource();
+                CardLayout cl = (CardLayout) miscInputPanels.getLayout();
+                cl.show(miscInputPanels, jcb.getSelectedItem().toString());
+            }
+        });
+        miscInputComboP = new JPanel();
+        miscInputComboP.add(miscInputCombo);   
         
         patientInputGUI = new PatientInputGUI(medicalClinicDB);
         patientADInputGUI = new PatientADInputGUI(medicalClinicDB);
         patientConditionInputGUI = new PatientConditionInputGUI
         (medicalClinicDB);
+        patientHCPInputGUI = new PatientHCPInputGUI(medicalClinicDB);
+        
         visitInputGUI = new VisitInputGUI(medicalClinicDB);
+        visitFileInputGUI = new VisitFileInputGUI(medicalClinicDB);
+        visitDiagnosisInputGUI = new VisitDiagnosisInputGUI(medicalClinicDB);
         visitStudyInputGUI = new VisitStudyInputGUI(medicalClinicDB);
         visitSystemInputGUI = new VisitSystemInputGUI(medicalClinicDB);
+        visitTRInputGUI = new VisitTRInputGUI(medicalClinicDB);
         visitTreatmentInputGUI = new VisitTreatmentInputGUI(medicalClinicDB);
+        
+        assisDevInputGUI = new ADInputGUI(medicalClinicDB);
         
         JFrame medicalDBUIFrame = new JFrame();
         patientInputPanel = patientInputGUI.createPatientInputPanel();
@@ -144,10 +205,17 @@ public class MedicalDBUI
                 createInputPanel();
         patientConditionInputPanel = patientConditionInputGUI.
                 createInputPanel();
+        patientHCPInputPanel = patientHCPInputGUI.createInputPanel();
+        
         visitInputPanel = visitInputGUI.createVisitInputPanel();
+        visitFileInputPanel = visitFileInputGUI.createInputPanel();
+        visitDiagnosisInputPanel = visitDiagnosisInputGUI.createInputPanel();
         visitStudyInputPanel = visitStudyInputGUI.createInputPanel();
         visitSystemInputPanel = visitSystemInputGUI.createInputPanel();
+        visitTRInputPanel = visitTRInputGUI.createInputPanel();
         visitTreatmentInputPanel = visitTreatmentInputGUI.createInputPanel();
+        
+        assisDevInputPanel = assisDevInputGUI.createInputPanel();
 
         // Creates and adds panels for patient inputs
         patientInputPanels = new JPanel(new CardLayout());
@@ -155,6 +223,7 @@ public class MedicalDBUI
         patientInputPanels.add(patientADInputPanel, patientADInputStr);
         patientInputPanels.add(patientConditionInputPanel, 
                 patientConditionInputStr);
+        patientInputPanels.add(patientHCPInputPanel, patientHCPInputStr);
                
         patientInputTabP.add(patientInputPanels);
         patientInputTabP.add(patientInputComboP,BorderLayout.PAGE_END);
@@ -162,19 +231,29 @@ public class MedicalDBUI
         // Creates and adds panels for visit inputs
         visitInputPanels = new JPanel(new CardLayout());
         visitInputPanels.add(visitInputPanel, visitInputStr);
+        visitInputPanels.add(visitFileInputPanel, visitFileInputStr);
+        visitInputPanels.add(visitDiagnosisInputPanel, visitDiagnosisInputStr);
         visitInputPanels.add(visitStudyInputPanel, visitStudyInputStr);
         visitInputPanels.add(visitSystemInputPanel, visitSystemInputStr);
+        visitInputPanels.add(visitTRInputPanel, visitTRInputStr);
         visitInputPanels.add(visitTreatmentInputPanel, visitTreatmentInputStr);
-               
+        
         visitInputTabP.add(visitInputPanels);
         visitInputTabP.add(visitInputComboP,BorderLayout.PAGE_END);
 
+        miscInputPanels = new JPanel(new CardLayout());
+        miscInputPanels.add(assisDevInputPanel, assisDevInputStr);
+        
+        miscInputTabP.add(miscInputPanels);
+        miscInputTabP.add(miscInputComboP,BorderLayout.PAGE_END);
+               
         medicalDBUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         JTabbedPane tabbedPane = new JTabbedPane();
 
         tabbedPane.addTab("Patient Input", patientInputTabP);
         tabbedPane.addTab("Visit Input", visitInputTabP);
+        tabbedPane.addTab("Miscellaneous Input", miscInputTabP);
         tabbedPane.addTab("Patient Search", patientSearchPanel);
         
         medicalDBUIFrame.add(tabbedPane);

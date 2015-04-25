@@ -1,5 +1,6 @@
 package MedicalClinicDB;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -37,49 +38,49 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /** 
  * This class extends the VisitMiscInputGUI class and allows a user to 
- * enter an treatment for a patient.
+ * enter an diagnosis for a patient.
  * 
  * @author Benjamin Menning, Dan Johnson, Holly Schreader
  * @version 05/05/2015 
  */
-public class VisitTreatmentInputGUI extends VisitMiscInputGUI
+public class VisitDiagnosisInputGUI extends VisitMiscInputGUI
 {
     // JLabel variables
-    private JLabel treatmentL;
+    private JLabel diagnosisL;
         
     // String and ArrayList of string variables for studies
-    private String treatmentStr = "Treatment:";
-    private ArrayList<String> treatmentList;
+    private String diagnosisStr = "Diagnosis:";
+    private ArrayList<String> diagnosisList;
     
     // JTextField varables
-    private JComboBox treatmentCB;                                    
+    private JComboBox diagnosisCB;                                    
     
     // JButton variables
-    private JButton addTreatmentB;
+    private JButton addDiagnosisB;
     
     // Button handler
-    private addTreatmentButtonHandler addTreatmentH;
+    private addDiagnosisButtonHandler addDiagnosisH;
                                 
     // JPanel variables
-    private JPanel treatmentP;
-    private JPanel addTreatmentButtonP;
+    private JPanel diagnosisP;
+    private JPanel addDiagnosisButtonP;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
-     * database for the treatment input GUI.
+     * database for the diagnosis input GUI.
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public VisitTreatmentInputGUI(MedicalClinicDB medicalClinicObj)
+    public VisitDiagnosisInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
     }
     
     /**
-     * This method creates and retrieves the components for an treatment 
+     * This method creates and retrieves the components for an diagnosis 
      * input panel.
      * 
-     * @return JPanel   returns the JPanel containing treatment components
+     * @return JPanel   returns the JPanel containing diagnosis components
      * @throws SQLException if SQL database encounters an error
      */
     @Override
@@ -88,35 +89,36 @@ public class VisitTreatmentInputGUI extends VisitMiscInputGUI
         // Call superclass
         super.createInputPanel();
 
-        // Assign treatment label for field
-        treatmentL = new JLabel(treatmentStr, SwingConstants.LEFT);
+        // Assign diagnosis label for field
+        diagnosisL = new JLabel(diagnosisStr, SwingConstants.LEFT);
 
-        // Assign treatment list from database
-        treatmentList = medicalClinicDB.getTreatmentList();
+        // Assign diagnosis list from database
+        diagnosisList = medicalClinicDB.getDiagnosisList();
         
-        // Assign treatment combo box information and adds list 
+        // Assign diagnosis combo box information and adds list 
         // information
-        treatmentCB = new JComboBox(treatmentList.toArray());
-        treatmentCB.setEditable(true);
-        AutoCompleteDecorator.decorate(treatmentCB);
+        diagnosisCB = new JComboBox(diagnosisList.toArray());
+        diagnosisCB.setEditable(true);
+        diagnosisCB.setPreferredSize(new Dimension(350, 25));
+        AutoCompleteDecorator.decorate(diagnosisCB);
         
-        // Assign add treatment button and button handler
-        addTreatmentB = new JButton("Add Visit Treatment");
-        addTreatmentH = new addTreatmentButtonHandler();
-        addTreatmentB.addActionListener(addTreatmentH);
+        // Assign add diagnosis button and button handler
+        addDiagnosisB = new JButton("Add Visit Diagnosis");
+        addDiagnosisH = new addDiagnosisButtonHandler();
+        addDiagnosisB.addActionListener(addDiagnosisH);
         
         // Assign panel for add button
-        addTreatmentButtonP = new JPanel();
-        addTreatmentButtonP.add(addTreatmentB);
+        addDiagnosisButtonP = new JPanel();
+        addDiagnosisButtonP.add(addDiagnosisB);
         
-        // Assign treatment panel components
-        treatmentP = new JPanel();
-        treatmentP.add(treatmentL);
-        treatmentP.add(treatmentCB);
+        // Assign diagnosis panel components
+        diagnosisP = new JPanel();
+        diagnosisP.add(diagnosisL);
+        diagnosisP.add(diagnosisCB);
         
-        // Add treatment panels to base panel and return final panel
-        basePanel.add(treatmentP);
-        basePanel.add(addTreatmentButtonP);
+        // Add diagnosis panels to base panel and return final panel
+        basePanel.add(diagnosisP);
+        basePanel.add(addDiagnosisButtonP);
         return basePanel;
     }
     
@@ -128,35 +130,35 @@ public class VisitTreatmentInputGUI extends VisitMiscInputGUI
     public void clearFields()
     {
         super.clearFields();
-        treatmentCB.setSelectedItem("");
+        diagnosisCB.setSelectedItem("");
     }
         
     /** 
-     * This class performs the action of adding an treatment by pressing
+     * This class performs the action of adding an diagnosis by pressing
      * a button.
      * 
      * @author Benjamin Menning, Dan Johnson, Holly Schreader
      * @version 05/05/2015
      */
-    private class addTreatmentButtonHandler implements ActionListener
+    private class addDiagnosisButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             String visitNumber = visitNumberCB.getSelectedItem().toString();
-            String treatment = treatmentCB.getSelectedItem().toString();
+            String diagnosis = diagnosisCB.getSelectedItem().toString();
             try 
             {
                 String visitID = medicalClinicDB.determineVisitID(
                         visitNumber);
-                String treatmentID = medicalClinicDB.
-                        determineTreatmentID(treatment);
-                medicalClinicDB.addVisitTreatment(null, 
-                        visitID, treatmentID);
+                String diagnosisID = medicalClinicDB.
+                        determineDiagnosisID(diagnosis);
+                medicalClinicDB.addVisitDiagnosis(null, 
+                        visitID, diagnosisID);
                 clearFields();
             } 
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTreatmentInputGUI.class.getName()).
+                Logger.getLogger(VisitDiagnosisInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

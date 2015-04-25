@@ -21,5 +21,7 @@ public class MedicalDBUser
         MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
         MedicalDBUI medicalDBUI = new MedicalDBUI(medicalClinicDB);
 //        medicalClinicDB.connectToDatabase();
+//        String diagnosisID = medicalClinicDB.determineDiagnosisID("Typhoid fever");
+//        System.out.println(diagnosisID);
    }
 }

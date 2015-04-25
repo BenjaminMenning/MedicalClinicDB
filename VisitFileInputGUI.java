@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -37,49 +37,49 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 /** 
  * This class extends the VisitMiscInputGUI class and allows a user to 
- * enter an treatment for a patient.
+ * enter an file for a patient.
  * 
  * @author Benjamin Menning, Dan Johnson, Holly Schreader
  * @version 05/05/2015 
  */
-public class VisitTreatmentInputGUI extends VisitMiscInputGUI
+public class VisitFileInputGUI extends VisitMiscInputGUI
 {
     // JLabel variables
-    private JLabel treatmentL;
+    private JLabel fileL;
         
     // String and ArrayList of string variables for studies
-    private String treatmentStr = "Treatment:";
-    private ArrayList<String> treatmentList;
+    private String fileStr = "File Name:";
+    private ArrayList<String> fileList;
     
     // JTextField varables
-    private JComboBox treatmentCB;                                    
+    private JTextField fileTF;                                    
     
     // JButton variables
-    private JButton addTreatmentB;
+    private JButton addFileB;
     
     // Button handler
-    private addTreatmentButtonHandler addTreatmentH;
+    private addFileButtonHandler addFileH;
                                 
     // JPanel variables
-    private JPanel treatmentP;
-    private JPanel addTreatmentButtonP;
+    private JPanel fileP;
+    private JPanel addFileButtonP;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
-     * database for the treatment input GUI.
+     * database for the file input GUI.
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public VisitTreatmentInputGUI(MedicalClinicDB medicalClinicObj)
+    public VisitFileInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
     }
     
     /**
-     * This method creates and retrieves the components for an treatment 
+     * This method creates and retrieves the components for an file 
      * input panel.
      * 
-     * @return JPanel   returns the JPanel containing treatment components
+     * @return JPanel   returns the JPanel containing file components
      * @throws SQLException if SQL database encounters an error
      */
     @Override
@@ -88,35 +88,31 @@ public class VisitTreatmentInputGUI extends VisitMiscInputGUI
         // Call superclass
         super.createInputPanel();
 
-        // Assign treatment label for field
-        treatmentL = new JLabel(treatmentStr, SwingConstants.LEFT);
-
-        // Assign treatment list from database
-        treatmentList = medicalClinicDB.getTreatmentList();
+        // Assign file label for field
+        fileL = new JLabel(fileStr, SwingConstants.LEFT);
         
-        // Assign treatment combo box information and adds list 
+        // Assign file combo box information and adds list 
         // information
-        treatmentCB = new JComboBox(treatmentList.toArray());
-        treatmentCB.setEditable(true);
-        AutoCompleteDecorator.decorate(treatmentCB);
+        fileTF = new JTextField(30);
+        fileTF.setEditable(true);
         
-        // Assign add treatment button and button handler
-        addTreatmentB = new JButton("Add Visit Treatment");
-        addTreatmentH = new addTreatmentButtonHandler();
-        addTreatmentB.addActionListener(addTreatmentH);
+        // Assign add file button and button handler
+        addFileB = new JButton("Add Visit File");
+        addFileH = new addFileButtonHandler();
+        addFileB.addActionListener(addFileH);
         
         // Assign panel for add button
-        addTreatmentButtonP = new JPanel();
-        addTreatmentButtonP.add(addTreatmentB);
+        addFileButtonP = new JPanel();
+        addFileButtonP.add(addFileB);
         
-        // Assign treatment panel components
-        treatmentP = new JPanel();
-        treatmentP.add(treatmentL);
-        treatmentP.add(treatmentCB);
+        // Assign file panel components
+        fileP = new JPanel();
+        fileP.add(fileL);
+        fileP.add(fileTF);
         
-        // Add treatment panels to base panel and return final panel
-        basePanel.add(treatmentP);
-        basePanel.add(addTreatmentButtonP);
+        // Add file panels to base panel and return final panel
+        basePanel.add(fileP);
+        basePanel.add(addFileButtonP);
         return basePanel;
     }
     
@@ -128,35 +124,36 @@ public class VisitTreatmentInputGUI extends VisitMiscInputGUI
     public void clearFields()
     {
         super.clearFields();
-        treatmentCB.setSelectedItem("");
+        fileTF.setText("");
     }
         
     /** 
-     * This class performs the action of adding an treatment by pressing
+     * This class performs the action of adding an file by pressing
      * a button.
      * 
      * @author Benjamin Menning, Dan Johnson, Holly Schreader
      * @version 05/05/2015
      */
-    private class addTreatmentButtonHandler implements ActionListener
+    private class addFileButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
             String visitNumber = visitNumberCB.getSelectedItem().toString();
-            String treatment = treatmentCB.getSelectedItem().toString();
+            String file = fileTF.getText().toString();
             try 
             {
-                String visitID = medicalClinicDB.determineVisitID(
-                        visitNumber);
-                String treatmentID = medicalClinicDB.
-                        determineTreatmentID(treatment);
-                medicalClinicDB.addVisitTreatment(null, 
-                        visitID, treatmentID);
+                String visitID = medicalClinicDB.determineVisitID(visitNumber);
+                String patientID = medicalClinicDB.determinePatientIDVisit
+                        (visitNumber);
+                medicalClinicDB.addFile(null, file, patientID);
+                String fileID = medicalClinicDB.determineFileID(file);
+                medicalClinicDB.addVisitFile(null, 
+                        visitID, fileID);
                 clearFields();
             } 
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTreatmentInputGUI.class.getName()).
+                Logger.getLogger(VisitFileInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }
