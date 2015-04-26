@@ -26,6 +26,8 @@ public class MedicalClinicDB
     private String conditionIDQuery = "SELECT conditionID \nFROM `Condition`";
     private String providerIDQuery = "SELECT healthcareProviderID "
             + "\nFROM HealthcareProvider";
+    private String procedureIDQuery = "SELECT icd9ProcedureID \nFROM "
+            + "ICD9Procedure";
     private String diagnosisIDQuery = "SELECT diagnosisID \nFROM Diagnosis";
     private String fileIDQuery = "SELECT fileID \nFROM File";
     private String studyIDQuery = "SELECT studyID \nFROM Study";
@@ -499,6 +501,60 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    public void addICD9Diagnosis(String icd9DiagnosisID, String icd9Code, String 
+            icd9Description) throws SQLException
+    {
+        String icd9DiagnosisIDStr = icd9DiagnosisID;
+        String icd9CodeStr = "'" + icd9Code + "'";
+        String icd9DescriptionStr = "'" + icd9Description + "'";
+        Statement stmt = null;
+        String query = "CALL addICD9Diagnosis(" + 
+                icd9DiagnosisIDStr + ", " +
+                icd9CodeStr + ", " + 
+                icd9DescriptionStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addICD9Procedure(String icd9ProcedureID, String icd9Code, String 
+            icd9Description) throws SQLException
+    {
+        String icd9ProcedureIDStr = icd9ProcedureID;
+        String icd9CodeStr = "'" + icd9Code + "'";
+        String icd9DescriptionStr = "'" + icd9Description + "'";
+        Statement stmt = null;
+        String query = "CALL addICD9Procedure(" + 
+                icd9ProcedureIDStr + ", " +
+                icd9CodeStr + ", " + 
+                icd9DescriptionStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
     public void addStudy(String studyID, String typeOfStudy) 
             throws SQLException
     {
@@ -558,6 +614,33 @@ public class MedicalClinicDB
         String query = "CALL addTreatment(" + 
                 treatmentIDStr + ", " +
                 treatmentNameStr + ")";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        }
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        System.out.println(query);
+    }
+    
+    public void addTreatmentICD9Procedure(String treatmentICD9ProcID, String 
+            treatmentID, String icd9ProcedureID) throws SQLException
+    {
+        String treatmentICD9ProcIDStr = treatmentICD9ProcID;
+        String treatmentIDStr = treatmentID;
+        String icd9ProcedureIDStr = icd9ProcedureID;
+        Statement stmt = null;
+        String query = "CALL addTreatmentICD9Procedure(" + 
+                treatmentICD9ProcIDStr + ", " +
+                treatmentIDStr + ", " + 
+                icd9ProcedureIDStr + ")";
         try 
         {
             stmt = connection.createStatement();
@@ -773,6 +856,27 @@ public class MedicalClinicDB
         return diagnosisID;
     }
     
+    public String determineProcedureID(String icd9Description) throws SQLException
+    {
+        Statement stmt = null;
+        stmt = connection.createStatement();
+        String procedureID = "";
+        String icd9DescriptionStr = "'" + icd9Description + "'";
+        String query = procedureIDQuery + "\nWHERE icd9Description = " + 
+                icd9DescriptionStr;
+        ResultSet rs = stmt.executeQuery(query);
+        if (!rs.next())
+        {
+            // do nothing
+        }
+        else 
+        {
+          rs.first();
+          procedureID = rs.getString("icd9ProcedureID");
+        }    
+        return procedureID;
+    }
+    
     public String determineSystemID(String systemUsed) throws SQLException
     {
         Statement stmt = null;
@@ -895,6 +999,33 @@ public class MedicalClinicDB
             if (stmt != null) { stmt.close(); }
         }    
         return conditionList;
+    }
+    
+    public ArrayList<String> getProcedureList() throws SQLException
+    {
+        ArrayList<String> procedureList = new ArrayList<String>();
+        procedureList.add("");
+        Statement stmt = null;
+        String query = "SELECT *\nFROM ICD9Procedure";
+        try 
+        {
+            stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while (rs.next()) 
+            {
+                String procedure = rs.getString("icd9Description");
+                procedureList.add(procedure);
+            }
+        } 
+        catch (SQLException e ) 
+        {
+            System.out.println(e);
+        } 
+        finally 
+        {
+            if (stmt != null) { stmt.close(); }
+        }    
+        return procedureList;
     }
     
     public ArrayList<String> getHCPList() throws SQLException

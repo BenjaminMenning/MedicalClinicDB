@@ -42,13 +42,15 @@ public class MedicalDBUI
     
     private String assisDevInputStr = "Add a Assistive Device";
     private String conditionInputStr = "Add a Condition";
-    private String healthcareProviderInputStr = "Add a Healthcare Provider";
+    private String icd9DiagnosisInputStr = "Add a ICD9 Diagnosis";
+    private String icd9ProcedureInputStr = "Add a ICD9 Procedure";
+    private String providerInputStr = "Add a Healthcare Provider";
     private String studyInputStr = "Add a Study";
     private String systemInputStr = "Add a System";
     private String treatmentInputStr = "Add a Treatment";
-        
-//    private changePatientInputPanelHandler changePatientPanelH;
-                        
+    private String treatmentICD9ProcInputStr = "Add a ICD9 Procedure to a "
+            + "Treatment";
+                                
     //JPanel variables
     private JPanel patientInputComboP;
     private JPanel patientInputPanel;
@@ -73,10 +75,13 @@ public class MedicalDBUI
     private JPanel miscInputComboP;
     private JPanel assisDevInputPanel;
     private JPanel conditionInputPanel;
-    private JPanel healthcareProviderInputPanel;
+    private JPanel icd9DiagnosisInputPanel;
+    private JPanel icd9ProcedureInputPanel;
+    private JPanel providerInputPanel;
     private JPanel studyInputPanel;
     private JPanel systemInputPanel;
     private JPanel treatmentInputPanel;
+    private JPanel treatmentICD9ProcInputPanel;
     private JPanel miscInputPanels;
     private JPanel miscInputTabP;
     
@@ -97,6 +102,14 @@ public class MedicalDBUI
     private VisitTreatmentInputGUI visitTreatmentInputGUI;
     
     private ADInputGUI assisDevInputGUI;
+    private ConditionInputGUI conditionInputGUI;
+    private ICD9DiagnosisInputGUI icd9DiagnosisInputGUI;
+    private ICD9ProcedureInputGUI icd9ProcedureInputGUI;
+    private ProviderInputGUI providerInputGUI;
+    private StudyInputGUI studyInputGUI;
+    private SystemInputGUI systemInputGUI;
+    private TreatmentInputGUI treatmentInputGUI;
+    private TreatmentICD9ProcInputGUI treatmentICD9ProcInputGUI;
     
     private JComboBox patientInputCombo = new JComboBox();
     private String patientComboBoxItems[] = {patientInputStr, patientADInputStr, 
@@ -109,20 +122,10 @@ public class MedicalDBUI
     
     private JComboBox miscInputCombo = new JComboBox();
     private String miscComboBoxItems[] = {assisDevInputStr, 
-        conditionInputStr, healthcareProviderInputStr, studyInputStr, 
-        systemInputStr, treatmentInputStr};
-    
-//    private class changePatientInputPanelHandler implements ActionListener
-//    {
-//        @Override
-//        public void actionPerformed(ActionEvent e) 
-//        {
-//            JComboBox jcb = (JComboBox) e.getSource();
-//            CardLayout cl = (CardLayout) patientInputPanels.getLayout();
-//            cl.show(patientInputPanels, jcb.getSelectedItem().toString());
-//        }
-//    }
-    
+        conditionInputStr, icd9DiagnosisInputStr, icd9ProcedureInputStr, 
+        providerInputStr, studyInputStr, systemInputStr, treatmentInputStr, 
+        treatmentICD9ProcInputStr};
+
     public MedicalDBUI(MedicalClinicDB medicalClinicObj) throws SQLException
     {
         medicalClinicDB = medicalClinicObj;
@@ -137,7 +140,6 @@ public class MedicalDBUI
         
         patientInputCombo = new JComboBox(patientComboBoxItems);
         patientInputCombo.setEditable(false);
-//        patientInputCombo.addActionListener(changePatientPanelH);
         patientInputCombo.addActionListener(new ActionListener() 
         {
             @Override
@@ -153,7 +155,6 @@ public class MedicalDBUI
         
         visitInputCombo = new JComboBox(visitComboBoxItems);
         visitInputCombo.setEditable(false);
-//        visitInputCombo.addActionListener(changePatientPanelH);
         visitInputCombo.addActionListener(new ActionListener() 
         {
             @Override
@@ -169,7 +170,6 @@ public class MedicalDBUI
 
         miscInputCombo = new JComboBox(miscComboBoxItems);
         miscInputCombo.setEditable(false);
-//        miscInputCombo.addActionListener(changePatientPanelH);
         miscInputCombo.addActionListener(new ActionListener() 
         {
             @Override
@@ -198,6 +198,15 @@ public class MedicalDBUI
         visitTreatmentInputGUI = new VisitTreatmentInputGUI(medicalClinicDB);
         
         assisDevInputGUI = new ADInputGUI(medicalClinicDB);
+        conditionInputGUI = new ConditionInputGUI(medicalClinicDB);
+        icd9DiagnosisInputGUI = new ICD9DiagnosisInputGUI(medicalClinicDB);
+        icd9ProcedureInputGUI = new ICD9ProcedureInputGUI(medicalClinicDB);
+        providerInputGUI = new ProviderInputGUI(medicalClinicDB);
+        studyInputGUI = new StudyInputGUI(medicalClinicDB);
+        systemInputGUI = new SystemInputGUI(medicalClinicDB);
+        treatmentInputGUI = new TreatmentInputGUI(medicalClinicDB);
+        treatmentICD9ProcInputGUI = new TreatmentICD9ProcInputGUI
+            (medicalClinicDB);
         
         JFrame medicalDBUIFrame = new JFrame();
         patientInputPanel = patientInputGUI.createPatientInputPanel();
@@ -216,6 +225,15 @@ public class MedicalDBUI
         visitTreatmentInputPanel = visitTreatmentInputGUI.createInputPanel();
         
         assisDevInputPanel = assisDevInputGUI.createInputPanel();
+        conditionInputPanel = conditionInputGUI.createInputPanel();
+        icd9DiagnosisInputPanel = icd9DiagnosisInputGUI.createInputPanel();
+        icd9ProcedureInputPanel = icd9ProcedureInputGUI.createInputPanel();
+        providerInputPanel = providerInputGUI.createInputPanel();
+        studyInputPanel = studyInputGUI.createInputPanel();
+        systemInputPanel = systemInputGUI.createInputPanel();
+        treatmentInputPanel = treatmentInputGUI.createInputPanel();
+        treatmentICD9ProcInputPanel = treatmentICD9ProcInputGUI.
+                createInputPanel();
 
         // Creates and adds panels for patient inputs
         patientInputPanels = new JPanel(new CardLayout());
@@ -243,6 +261,15 @@ public class MedicalDBUI
 
         miscInputPanels = new JPanel(new CardLayout());
         miscInputPanels.add(assisDevInputPanel, assisDevInputStr);
+        miscInputPanels.add(conditionInputPanel, conditionInputStr);
+        miscInputPanels.add(icd9DiagnosisInputPanel, icd9DiagnosisInputStr);
+        miscInputPanels.add(icd9ProcedureInputPanel, icd9ProcedureInputStr);
+        miscInputPanels.add(providerInputPanel, providerInputStr);
+        miscInputPanels.add(studyInputPanel, studyInputStr);
+        miscInputPanels.add(systemInputPanel, systemInputStr);
+        miscInputPanels.add(treatmentInputPanel, treatmentInputStr);
+        miscInputPanels.add(treatmentICD9ProcInputPanel, 
+                treatmentICD9ProcInputStr);
         
         miscInputTabP.add(miscInputPanels);
         miscInputTabP.add(miscInputComboP,BorderLayout.PAGE_END);
