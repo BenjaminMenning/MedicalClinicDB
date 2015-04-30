@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -45,8 +46,18 @@ public class ADInputGUI
     // JLabel variables
     private JLabel assisDevL;
         
-    // String variable
+    // String variables
     private String assisDevStr = "Assistive Device:";
+    private String invalidADStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid assistive device entered. Assistive device field "
+            + "cannot be empty. Please enter a valid assistive device.</p>"
+            + "</body></html>";
+    private String validADStr0;
+    private String validADStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validADStr2
+            = "' has been added successfully.</p></body></html>";
+
     
     // JTextField varables
     private JTextField assisDevTF;                                    
@@ -123,7 +134,7 @@ public class ADInputGUI
     {
         assisDevTF.setText("");
     }
-        
+    
     /** 
      * This class performs the action of adding an assistive device by pressing
      * a button.
@@ -138,12 +149,22 @@ public class ADInputGUI
             String assisDev = assisDevTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(assisDev);
                 medicalClinicDB.addAssistiveDevice(null, assisDev);
                 clearFields();
+                validADStr0 = validADStr1 + assisDev + 
+                        validADStr2;
+                JOptionPane.showMessageDialog(null, validADStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidADStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(ADInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

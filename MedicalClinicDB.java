@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
-import javax.swing.JOptionPane;
  
 public class MedicalClinicDB 
 {
@@ -28,15 +27,12 @@ public class MedicalClinicDB
             + "\nFROM HealthcareProvider";
     private String procedureIDQuery = "SELECT icd9ProcedureID \nFROM "
             + "ICD9Procedure";
-    private String diagnosisIDQuery = "SELECT diagnosisID \nFROM Diagnosis";
+    private String diagnosisIDQuery = "SELECT icd9DiagnosisID \nFROM "
+            + "ICD9Diagnosis";
     private String fileIDQuery = "SELECT fileID \nFROM File";
     private String studyIDQuery = "SELECT studyID \nFROM Study";
     private String systemIDQuery = "SELECT systemID \nFROM System";
     private String treatmentIDQuery = "SELECT treatmentID \nFROM Treatment";
-    
-    private String invalidCNStr =  "";
-    private String invalidADStr = "Invalid assistive device entered. Please "
-            + "enter an assistive device that is listed under the suggestions.";
     private int queryCriteriaCount = 0;
     private Connection connection = null;
     
@@ -94,7 +90,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -122,8 +118,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e) 
         {
-                JOptionPane.showMessageDialog(null, invalidADStr, 
-                        "Error", JOptionPane.ERROR_MESSAGE);        
+            throw e;
         } 
         finally 
         {
@@ -153,7 +148,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -180,7 +175,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -215,7 +210,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -243,7 +238,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -270,7 +265,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -297,7 +292,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -324,7 +319,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -357,7 +352,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -384,7 +379,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -410,7 +405,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -435,7 +430,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -462,7 +457,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -492,7 +487,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -517,9 +512,9 @@ public class MedicalClinicDB
             stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(query);
         }
-        catch (SQLException e ) 
+        catch (SQLException e) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -546,7 +541,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -571,7 +566,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -596,7 +591,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -621,7 +616,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -648,7 +643,7 @@ public class MedicalClinicDB
         }
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -840,8 +835,7 @@ public class MedicalClinicDB
         stmt = connection.createStatement();
         String diagnosisID = "";
         String icd9DescriptionStr = "'" + icd9Description + "'";
-        String query = diagnosisIDQuery + "\nRIGHT JOIN ICD9Diagnosis"
-                + "\nUSING (icd9DiagnosisID)\nWHERE icd9Description = " + 
+        String query = diagnosisIDQuery + "\nWHERE icd9Description = " + 
                 icd9DescriptionStr;
         ResultSet rs = stmt.executeQuery(query);
         if (!rs.next())
@@ -851,7 +845,7 @@ public class MedicalClinicDB
         else 
         {
           rs.first();
-          diagnosisID = rs.getString("diagnosisID");
+          diagnosisID = rs.getString("icd9DiagnosisID");
         }    
         return diagnosisID;
     }
@@ -874,6 +868,10 @@ public class MedicalClinicDB
           rs.first();
           procedureID = rs.getString("icd9ProcedureID");
         }    
+//        if(procedureID.equals(""))
+//        {
+//            throw new IllegalArgumentException();
+//        }
         return procedureID;
     }
     
@@ -937,7 +935,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -964,7 +962,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -992,7 +990,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1019,7 +1017,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1050,7 +1048,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1077,7 +1075,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1104,7 +1102,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1131,7 +1129,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1158,7 +1156,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1185,7 +1183,7 @@ public class MedicalClinicDB
         } 
         catch (SQLException e ) 
         {
-            System.out.println(e);
+            throw e;
         } 
         finally 
         {
@@ -1193,6 +1191,42 @@ public class MedicalClinicDB
         }    
         return treatmentList;
     }
+    
+    /**
+     * This method determines whether or not a field is a empty and throws an
+     * IllegalArgumentException if it is.
+     * 
+     * @param field the String to be evaluated as empty or not
+     */
+    public void isFieldEmpty(String field)
+    {
+        boolean isEmpty = false;
+        String fieldStr = field;
+        isEmpty = fieldStr.equals("");
+        if(isEmpty == true)
+        {
+            throw new IllegalArgumentException();
+        }
+//        return isEmpty;
+    }
+        
+//    /**
+//     * This method determines whether or not a field is a empty and throws an
+//     * IllegalArgumentException if it is.
+//     * 
+//     * @param field the String to be evaluated as empty or not
+//     */
+//    public boolean isFieldEmpty2(String field)
+//    {
+//        boolean isEmpty = false;
+//        String fieldStr = field;
+//        isEmpty = fieldStr.equals("");
+//        if(isEmpty == true)
+//        {
+//            throw new IllegalArgumentException();
+//        }
+//        return isEmpty;
+//    }
  
 //    public static void main(String[] argv) throws SQLException 
 //    {

@@ -46,7 +46,17 @@ public abstract class PatientMiscInputGUI
         
     // String and ArrayList of string variables for clinic numbers
     protected String clinicNumberStr = "Clinic Number:";
+    protected String invalidEntryStr0 =  "<html><body><p style='width: "
+            + "200px;'>Invalid value(s) entered. Fields cannot be empty and "
+            + "values entered must match those that are listed. Please "
+            + "try again.</p></body></html>";
+    protected String validEntryStr0;
+    protected String validEntryStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    protected String validEntryStr2
+            = "' has been added successfully to the patient.</p></body></html>";
     protected ArrayList<String> clinicNumberList;
+    
         
     // JTextField varables
     protected JComboBox clinicNumberCB;

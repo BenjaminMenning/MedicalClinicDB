@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -51,6 +52,14 @@ public class ProviderInputGUI
     private String firstNameStr = "First Name:";
     private String middleNameStr = "Middle Name:";
     private String lastNameStr = "Last Name:";
+    private String invalidNameStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid name entered. Name fields cannot be"
+            + " empty. Please enter a valid name.</p></body></html>";
+    private String validNameStr0;
+    private String validNameStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validNameStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField firstNameTF;                                    
@@ -145,7 +154,7 @@ public class ProviderInputGUI
         middleNameTF.setText("");
         lastNameTF.setText("");
     }
-        
+            
     /** 
      * This class performs the action of adding an provider by pressing
      * a button.
@@ -160,15 +169,28 @@ public class ProviderInputGUI
             String firstName = firstNameTF.getText();
             String middleName = middleNameTF.getText();
             String lastName = lastNameTF.getText();
+            String name = firstName + " " + middleName + " " + lastName;
             try 
             {
+                medicalClinicDB.isFieldEmpty(firstName);
+                medicalClinicDB.isFieldEmpty(middleName);
+                medicalClinicDB.isFieldEmpty(lastName);
                 medicalClinicDB.addHealthcareProvider(null, firstName, 
                         middleName, lastName);
                 clearFields();
+                validNameStr0 = validNameStr1 + name + 
+                        validNameStr2;
+                JOptionPane.showMessageDialog(null, validNameStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidNameStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(ProviderInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

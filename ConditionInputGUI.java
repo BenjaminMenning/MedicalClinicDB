@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -45,8 +46,16 @@ public class ConditionInputGUI
     // JLabel variables
     private JLabel conditionL;
         
-    // String variable
+    // String variables
     private String conditionStr = "Condition:";
+    private String invalidConditionStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid condition entered. Condition field cannot be"
+            + " empty. Please enter a valid condition.</p></body></html>";
+    private String validConditionStr0;
+    private String validConditionStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validConditionStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField conditionTF;                                    
@@ -123,7 +132,7 @@ public class ConditionInputGUI
     {
         conditionTF.setText("");
     }
-        
+    
     /** 
      * This class performs the action of adding an condition by pressing
      * a button.
@@ -138,12 +147,22 @@ public class ConditionInputGUI
             String condition = conditionTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(condition);
                 medicalClinicDB.addCondition(null, condition);
                 clearFields();
+                validConditionStr0 = validConditionStr1 + condition + 
+                        validConditionStr2;
+                JOptionPane.showMessageDialog(null, validConditionStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidConditionStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(ConditionInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

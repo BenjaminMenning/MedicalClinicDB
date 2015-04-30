@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -146,6 +147,8 @@ public class VisitSystemInputGUI extends VisitMiscInputGUI
             String system = systemCB.getSelectedItem().toString();
             try 
             {
+                medicalClinicDB.isFieldEmpty(visitNumber);
+                medicalClinicDB.isFieldEmpty(system);
                 String visitID = medicalClinicDB.determineVisitID(
                         visitNumber);
                 String systemID = medicalClinicDB.
@@ -153,9 +156,20 @@ public class VisitSystemInputGUI extends VisitMiscInputGUI
                 medicalClinicDB.addVisitSystem(null, 
                         visitID, systemID);
                 clearFields();
+                validEntryStr0 = validEntryStr1 + system + 
+                        validEntryStr2;
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
                 Logger.getLogger(VisitSystemInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }

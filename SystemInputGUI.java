@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -47,6 +48,14 @@ public class SystemInputGUI
         
     // String variable
     private String systemStr = "System:";
+    private String invalidSystemStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid system entered. System field cannot be"
+            + " empty. Please enter a valid system.</p></body></html>";
+    private String validSystemStr0;
+    private String validSystemStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validSystemStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField systemTF;                                    
@@ -123,7 +132,7 @@ public class SystemInputGUI
     {
         systemTF.setText("");
     }
-        
+    
     /** 
      * This class performs the action of adding an system by pressing
      * a button.
@@ -138,12 +147,22 @@ public class SystemInputGUI
             String system = systemTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(system);
                 medicalClinicDB.addSystem(null, system);
                 clearFields();
+                validSystemStr0 = validSystemStr1 + system + 
+                        validSystemStr2;
+                JOptionPane.showMessageDialog(null, validSystemStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidSystemStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(SystemInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

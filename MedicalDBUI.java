@@ -216,7 +216,7 @@ public class MedicalDBUI
                 createInputPanel();
         patientHCPInputPanel = patientHCPInputGUI.createInputPanel();
         
-        visitInputPanel = visitInputGUI.createVisitInputPanel();
+        visitInputPanel = visitInputGUI.createInputPanel();
         visitFileInputPanel = visitFileInputGUI.createInputPanel();
         visitDiagnosisInputPanel = visitDiagnosisInputGUI.createInputPanel();
         visitStudyInputPanel = visitStudyInputGUI.createInputPanel();

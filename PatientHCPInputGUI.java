@@ -4,11 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -45,17 +47,17 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 public class PatientHCPInputGUI extends PatientMiscInputGUI
 {
     // JLabel variables
-    private JLabel healthcareProviderL;
-    private JLabel providerTypeL;
+    protected JLabel healthcareProviderL;
+    protected JLabel providerTypeL;
         
     // String and ArrayList of string variables for healthcareProviders
-    private String healthcareProviderStr = "Healthcare Provider:";
+    protected String healthcareProviderStr = "Healthcare Provider:";
     private String providerTypeStr = "Type:";
     private String[] providerTypesStr = new String[]{"Primary", "Secondary"};
-    private ArrayList<String> healthcareProviderList;
+    protected ArrayList<String> healthcareProviderList;
     
     // JTextField varables
-    private JComboBox healthcareProviderCB;                                    
+    protected JComboBox healthcareProviderCB;                                    
     private JComboBox providerTypeCB;                                    
     
     // JButton variables
@@ -65,7 +67,7 @@ public class PatientHCPInputGUI extends PatientMiscInputGUI
     private addHealthcareProviderButtonHandler addHealthcareProviderH;
                                 
     // JPanel variables
-    private JPanel healthcareProviderP;
+    protected JPanel healthcareProviderP;
     private JPanel providerTypeP;
     private JPanel addHCPButtonP;
         
@@ -163,6 +165,8 @@ public class PatientHCPInputGUI extends PatientMiscInputGUI
             String providerType = providerTypeCB.getSelectedItem().toString();
             try 
             {
+                medicalClinicDB.isFieldEmpty(clinicNumber);
+                medicalClinicDB.isFieldEmpty(healthcareProvider);
                 String patientID = medicalClinicDB.determinePatientID(
                         clinicNumber);
                 String healthcareProviderID = medicalClinicDB.
@@ -170,9 +174,20 @@ public class PatientHCPInputGUI extends PatientMiscInputGUI
                 medicalClinicDB.addPatientHealthcareProvider(null, 
                         patientID, healthcareProviderID, providerType);
                 clearFields();
+                validEntryStr0 = validEntryStr1 + healthcareProvider + 
+                        validEntryStr2;
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException | NoSuchElementException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
                 Logger.getLogger(PatientHCPInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }

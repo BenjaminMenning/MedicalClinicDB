@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -46,9 +47,22 @@ public class ICD9DiagnosisInputGUI
     private JLabel icd9CodeL;
     private JLabel icd9DescriptionL;
         
-    // String variable
+    // String variables
     private String icd9CodeStr = "ICD9 Code:";
     private String icd9DescriptionStr = "ICD9 Description:";
+    private String invalidDiagnosisStr0 =  "<html><body><p style='width: "
+            + "200px;'>Invalid diagnosis entered. Diagnosis fields cannot be"
+            + " empty. Please enter a valid diagnosis code and/or description."
+            + "</p></body></html>";
+    private String invalidDiagnosisStr1 = "<html><body><p style='width: "
+            + "200px;'>Invalid diagnosis entered. Diagnosis code must be "
+            + "between 3 and 5 characters. Please enter a valid diagnosis code."
+            + "</p></body></html>";
+    private String validDiagnosisStr0;
+    private String validDiagnosisStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validDiagnosisStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField icd9CodeTF;                                    
@@ -134,7 +148,7 @@ public class ICD9DiagnosisInputGUI
         icd9CodeTF.setText("");
         icd9DescriptionTF.setText("");
     }
-        
+    
     /** 
      * This class performs the action of adding an diagnosis by pressing
      * a button.
@@ -150,14 +164,29 @@ public class ICD9DiagnosisInputGUI
             String icd9Description = icd9DescriptionTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(icd9Code);
+                medicalClinicDB.isFieldEmpty(icd9Description);
                 medicalClinicDB.addICD9Diagnosis(null, icd9Code, 
                         icd9Description);
                 clearFields();
+                validDiagnosisStr0 = validDiagnosisStr1 + icd9Description + 
+                        validDiagnosisStr2;
+                JOptionPane.showMessageDialog(null, validDiagnosisStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidDiagnosisStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
-                        log(Level.SEVERE, null, ex);
+//                int errorCodeNum = ex.getErrorCode();
+                JOptionPane.showMessageDialog(null, invalidDiagnosisStr1, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+//                System.out.println(errorCodeNum);
+//                Logger.getLogger(ICD9DiagnosisInputGUI.class.getName()).
+//                        log(Level.SEVERE, null, ex);
             }
         }
     }

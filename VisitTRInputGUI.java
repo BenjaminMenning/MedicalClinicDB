@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -53,6 +54,14 @@ public class VisitTRInputGUI extends VisitMiscInputGUI
     private String testResults2Str = "Test Results 2:";
     private String testResults3Str = "Test Results 3:";
     private String testResults4Str = "Test Results 4:";
+    private String invalidEntryStr0 =  "<html><body><p style='width: "
+            + "200px;'>Invalid value(s) entered. At least one test result field "
+            + "must not be empty and values entered for the clinic number must "
+            + "match those that are listed. Please try again."
+            + "</p></body></html>";
+    private String validEntryStr0 =  "<html><body><p style='width: "
+            + "200px;'>Test results have been successfully added to the visit."
+            + "</p></body></html>";
     
     // JTextField varables
     private JTextField testResults1TF;                                    
@@ -155,6 +164,35 @@ public class VisitTRInputGUI extends VisitMiscInputGUI
         testResults3TF.setText("");
         testResults4TF.setText("");
     }
+    
+    public boolean areFieldsEmpty()
+    {
+        int count = 0;
+        if(testResults1TF.getText().equals("") == false)
+        {
+            count++;
+        }
+        if(testResults2TF.getText().equals("") == false)
+        {
+            count++;
+        }
+        if(testResults3TF.getText().equals("") == false)
+        {
+            count++;
+        }
+        if(testResults4TF.getText().equals("") == false)
+        {
+            count++;
+        }
+        if(count == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
         
     /** 
      * This class performs the action of adding an test results by pressing
@@ -168,31 +206,32 @@ public class VisitTRInputGUI extends VisitMiscInputGUI
         public void actionPerformed(ActionEvent e)
         {
             String visitNumber = visitNumberCB.getSelectedItem().toString();
-//            if(testResults1TF.getText().equals("") == false)
-//            {
-                String testResults1 = testResults1TF.getText();
-//            }
-//            if(testResults2TF.getText().equals("") == false)
-//            {
-                String testResults2 = testResults2TF.getText();
-//            }
-//            if(testResults3TF.getText().equals("") == false)
-//            {
-                String testResults3 = testResults3TF.getText();
-//            }
-//            if(testResults4TF.getText().equals("") == false)
-//            {
-                String testResults4 = testResults4TF.getText();
-//            }
+            String testResults1 = testResults1TF.getText();
+            String testResults2 = testResults2TF.getText();
+            String testResults3 = testResults3TF.getText();
+            String testResults4 = testResults4TF.getText();
             try 
             {
+                if(areFieldsEmpty())
+                {
+                    throw new IllegalArgumentException();
+                }
                 String visitID = medicalClinicDB.determineVisitID(visitNumber);
                 medicalClinicDB.addVisitTestResults(visitID, testResults1, 
                         testResults2, testResults3, testResults4);
                 clearFields();
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
                 Logger.getLogger(VisitTRInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }

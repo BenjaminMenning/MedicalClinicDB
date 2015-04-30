@@ -5,11 +5,14 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -24,87 +27,83 @@ import javax.swing.SwingConstants;
  *
  * @author Ben
  */
-public class VisitInputGUI 
+public class VisitInputGUI extends PatientHCPInputGUI
 {
     //Window size
     private static final int WIDTH = 450;                               
     private static final int HEIGHT = 425;                             
         
     //JLabel variables
-    private JLabel visitIDL;
     private JLabel visitNumberL;
     private JLabel visitDateL;                                    
-    private JLabel patientIDL;
-    private JLabel healthcareProviderIDL;
     private JLabel dateAnalysisCompleteL;
     private JLabel dateProcessingCompleteL;
     
-    private JLabel patientConditionIDL;
-    private JLabel conditionL;
-    
-    private String visitIDStr = "Visit ID:";
-    private String visitNumberStr = "Visit Number:";
-    private String visitDateStr = "Visit Date:";                                    
-    private String patientIDStr = "Patient ID:";
-    private String healthcareProviderIDStr = "Healthcare Provider ID:";
+    private String visitNumberStr = "Visit Number(XXXXXXXX):";
+    private String visitDateStr = "Visit Date(YYYY-MM-DD):";                                    
     private String dateAnalysisCompleteStr = "Date Analysis Complete:";
     private String dateProcessingCompleteStr = "Date Processing Complete:";
-        
-    private String[] addPatientStrings = {"Add Patient", "Add Patient Condition"
-            , "Add Patient Healthcare Provider", "Add Patient Assistive Device"
-            };
     
+    private String errorStr = "";
+    private String emptyFieldsStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid value(s) entered. Fields cannot be empty. "
+            + "Please try again.</p></body></html>";
+    private String invalidVisitNumStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid visit number entered. Visit number must "
+            + "be alphanumeric and only 8 digits long. Please try again."
+            + "</p></body></html>";
+    private String invalidDateStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid visit date(s) entered. Date(s) must "
+            + "follow the format 'YYYY-MM-DD'. Please try again."
+            + "</p></body></html>";
+    private String invalidClinicNumStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid clinic number entered. Clinic number entered "
+            + "must match those listed. Please try again.</p></body></html>";
+    private String invalidProviderStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid provider entered. Provider entered must match "
+            + "those listed. Please try again.</p></body></html>";
+    private String invalidAnlysDateStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid analysis date entered. Analysis date must be on "
+            + "or after date of the visit. Please try again.</p></body></html>";
+    private String invalidPrcsDateStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid processing date entered. Processing date must "
+            + "be on or after date of the analysis date. Please try again."
+            + "</p></body></html>";
+    private String validEntryStr0 = "<html><body><p style='width: "
+            + "200px;'>Visit has been added successfully.</p></body></html>";
+            
     //JTextField varables
-    private JTextField visitIDTF;
     private JTextField visitNumberTF;
     private JTextField visitDateTF;                                    
-    private JTextField patientIDTF;
-    private JTextField healthcareProviderIDTF;
     private JTextField dateAnalysisCompleteTF;
     private JTextField dateProcessingCompleteTF;
     
     
     //JButton variables
     private JButton addVisitB;
-    private JButton searchPatientB;
-    
-    private JComboBox addPatientList = new JComboBox(addPatientStrings);
-    
+        
     private addVisitButtonHandler addVisitH;
                         
     //JPanel variables
-    private JPanel visitIDP;
     private JPanel visitNumberP;
     private JPanel visitDateP;                                    
-    private JPanel patientIDP;
-    private JPanel healthcareProviderIDP;
     private JPanel dateAnalysisCompleteP;
     private JPanel dateProcessingCompleteP;
     private JPanel addVisitButtonP;
-    
-//    //Action variables
-//    private Action submitAnswerA, submitWagerA;  
-    
-    private MedicalClinicDB medicalClinicDB;
-    
-    public JPanel createVisitInputPanel()
+        
+    public JPanel createInputPanel() throws SQLException
     {
+        super.createInputPanel();
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(10,1)); 
         
-        visitIDL = new JLabel(visitIDStr, SwingConstants.LEFT);
         visitNumberL = new JLabel(visitNumberStr, SwingConstants.LEFT);
         visitDateL = new JLabel(visitDateStr, SwingConstants.LEFT);
-        patientIDL = new JLabel(patientIDStr, SwingConstants.LEFT); 
-        healthcareProviderIDL = new JLabel(healthcareProviderIDStr, SwingConstants.LEFT);                               
         dateAnalysisCompleteL = new JLabel(dateAnalysisCompleteStr, SwingConstants.LEFT);
         dateProcessingCompleteL = new JLabel(dateProcessingCompleteStr, SwingConstants.LEFT);
 
-        visitIDTF = new JTextField(20);
         visitNumberTF = new JTextField(20);
         visitDateTF = new JTextField(20);
-        patientIDTF = new JTextField(20);
-        healthcareProviderIDTF = new JTextField(20);                                    
         dateAnalysisCompleteTF = new JTextField(20);
         dateProcessingCompleteTF = new JTextField(20);
         
@@ -117,10 +116,6 @@ public class VisitInputGUI
         int rows = 1;
         int columns = 2;
         GridLayout gridLayout = new GridLayout(rows, columns);
-        visitIDP = new JPanel();
-//        visitIDP.setLayout(gridLayout);
-        visitIDP.add(visitIDL);
-        visitIDP.add(visitIDTF);
         visitNumberP = new JPanel();
 //        visitNumberP.setLayout(gridLayout);
         visitNumberP.add(visitNumberL);
@@ -129,14 +124,6 @@ public class VisitInputGUI
 //        visitDateP.setLayout(gridLayout);
         visitDateP.add(visitDateL);
         visitDateP.add(visitDateTF);
-        patientIDP = new JPanel(); 
-//        patientIDP.setLayout(gridLayout);
-        patientIDP.add(patientIDL);
-        patientIDP.add(patientIDTF);
-        healthcareProviderIDP = new JPanel();                               
-//        healthcareProviderIDP.setLayout(gridLayout);
-        healthcareProviderIDP.add(healthcareProviderIDL);
-        healthcareProviderIDP.add(healthcareProviderIDTF);
         dateAnalysisCompleteP = new JPanel();
 //        dateAnalysisCompleteP.setLayout(gridLayout);
         dateAnalysisCompleteP.add(dateAnalysisCompleteL);
@@ -146,56 +133,182 @@ public class VisitInputGUI
         dateProcessingCompleteP.add(dateProcessingCompleteL);
         dateProcessingCompleteP.add(dateProcessingCompleteTF);
         
-        panel.add(visitIDP);
         panel.add(visitNumberP);
         panel.add(visitDateP);
-        panel.add(patientIDP);
-        panel.add(healthcareProviderIDP);
+        panel.add(clinicNumberP);
+        panel.add(healthcareProviderP);
         panel.add(dateAnalysisCompleteP);
         panel.add(dateProcessingCompleteP);
         panel.add(addVisitButtonP);
         return panel;
     }
         
-    public void clearAddVisitTF()
+    public void clearFields()
     {
-        visitIDTF.setText("");
+        super.clearFields();
         visitNumberTF.setText("");
         visitDateTF.setText("");
-        patientIDTF.setText("");
-        healthcareProviderIDTF.setText("");                                    
         dateAnalysisCompleteTF.setText("");
         dateProcessingCompleteTF.setText("");
+    }
+    
+    /**
+     * This method determines whether or not a field is a empty and throws an
+     * IllegalArgumentException if it is.
+     * 
+     * @param field the String to be evaluated as empty or not
+     */
+    public void isFieldEmpty(String field)
+    {
+        boolean isEmpty = false;
+        String fieldStr = field;
+        isEmpty = fieldStr.equals("");
+        if(isEmpty == true)
+        {
+            errorStr = emptyFieldsStr;
+            throw new IllegalArgumentException();
+        }
+    }
+    
+    public void validateVisitNum(String visitNum)
+    {
+        String visitNumStr = visitNum;
+        if(!visitNumStr.matches("[A-Za-z0-9]+") || visitNumStr.length() != 8)
+        {
+            errorStr = invalidVisitNumStr;
+            throw new IllegalArgumentException();
+        }
+    }
+    
+    public void validateClinicNum(String clinicNum) throws SQLException
+    {
+        String clinicNumStr = clinicNum;
+        String patientID;
+        patientID = medicalClinicDB.determinePatientID(clinicNumStr);
+        if(patientID.equals(""))
+        {
+            errorStr = invalidClinicNumStr;
+            throw new IllegalArgumentException();
+        }
+    }
+    
+    public void validateProvider(String providerName) throws SQLException
+    {
+        String providerNameStr = providerName;
+        String providerID;
+        providerID = medicalClinicDB.determineHCPID(providerNameStr);
+        if(providerID.equals(""))
+        {
+            errorStr = invalidProviderStr;
+            throw new IllegalArgumentException();
+        }
+    }
+    
+    public void validateDate(String date) throws ParseException
+    {
+        String dateStr = date;
+        String dateFmtStr = "yyyy-MM-dd";
+        SimpleDateFormat simpDateFmt = new SimpleDateFormat(dateFmtStr);
+        try 
+        {
+            simpDateFmt.parse(dateStr);
+        } 
+        catch (ParseException e) 
+        {
+            errorStr = invalidDateStr;
+            throw e;
+        }
+    }
+    
+    public void validateAnalysisDate(String anlysDate) throws ParseException
+    {
+        String analysisDateStr = anlysDate;
+        validateDate(analysisDateStr);
+        String visitDateStr = visitDateTF.getText();
+        String dateFmtStr = "yyyy-MM-dd";
+        SimpleDateFormat simpDateFmt = new SimpleDateFormat(dateFmtStr);
+        Date analysisDate = simpDateFmt.parse(analysisDateStr);
+        Date visitDate = simpDateFmt.parse(visitDateStr);
+        if(analysisDate.before(visitDate))
+        {
+            errorStr = invalidAnlysDateStr;
+            throw new IllegalArgumentException();
+        }
+    }
+    
+    public void validateProcessingDate(String prcsDate) throws ParseException
+    {
+        String processingDateStr = prcsDate;
+        validateDate(processingDateStr);
+        String analysisDateStr = dateAnalysisCompleteTF.getText();
+        String dateFmtStr = "yyyy-MM-dd";
+        SimpleDateFormat simpDateFmt = new SimpleDateFormat(dateFmtStr);
+        Date processingDate = simpDateFmt.parse(processingDateStr);
+        Date analysisDate = simpDateFmt.parse(analysisDateStr);
+        if(processingDate.before(analysisDate))
+        {
+            errorStr = invalidPrcsDateStr;
+            throw new IllegalArgumentException();
+        }
     }
         
     private class addVisitButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
         {
-            String visitID = visitIDTF.getText();
             String visitNumber = visitNumberTF.getText();
             String visitDate = visitDateTF.getText();
-            String patientID = patientIDTF.getText();
-            String healthcareProviderID = healthcareProviderIDTF.getText();
+            String clinicNumber = clinicNumberCB.getSelectedItem().toString();
+            String healthcareProvider = healthcareProviderCB.getSelectedItem().toString();
             String dateAnalysisComplete = dateAnalysisCompleteTF.getText();
             String dateProcessingComplete = dateProcessingCompleteTF.getText();
             try 
             {
-                medicalClinicDB.addVisit(visitID, visitNumber, visitDate, 
+                isFieldEmpty(visitNumber);
+                isFieldEmpty(visitDate);
+                isFieldEmpty(clinicNumber);
+                isFieldEmpty(healthcareProvider);
+                isFieldEmpty(dateAnalysisComplete);
+                isFieldEmpty(dateProcessingComplete);                
+                validateVisitNum(visitNumber);
+                validateDate(visitDate);
+                validateClinicNum(clinicNumber);
+                validateProvider(healthcareProvider);
+                validateAnalysisDate(dateAnalysisComplete);
+                validateProcessingDate(dateProcessingComplete);
+                String patientID = medicalClinicDB.determinePatientID(
+                        clinicNumber);
+                String healthcareProviderID = medicalClinicDB.
+                        determineHCPID(healthcareProvider);
+                medicalClinicDB.addVisit(null, visitNumber, visitDate, 
                         patientID, healthcareProviderID, dateAnalysisComplete, 
                         dateProcessingComplete);
+                clearFields();
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
-            catch (SQLException ex) 
+            catch (SQLException | ParseException | IllegalArgumentException ex) 
             {
-                Logger.getLogger(MedicalDBUI.class.getName()).log(Level.SEVERE, 
+                JOptionPane.showMessageDialog(null, errorStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+                Logger.getLogger(VisitInputGUI.class.getName()).log(Level.SEVERE, 
                         null, ex);
-            }
-            clearAddVisitTF();
+            } 
         }
     }
     
     public VisitInputGUI(MedicalClinicDB medicalClinicObj)
     {
-        medicalClinicDB = medicalClinicObj;
+        super(medicalClinicObj);
+    }
+    
+    public static void main(String[] argv) throws SQLException, ParseException 
+    {
+        MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
+        medicalClinicDB.connectToDatabase();
+        VisitInputGUI visitInputGUI = new VisitInputGUI(medicalClinicDB);
+        visitInputGUI.validateVisitNum("ABC4EFG8");
+        visitInputGUI.validateClinicNum("4-234-123");
+        visitInputGUI.validateProvider("Dave WW Boldt");
     }
 }

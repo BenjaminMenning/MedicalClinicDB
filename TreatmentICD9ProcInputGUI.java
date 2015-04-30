@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -52,6 +53,16 @@ public class TreatmentICD9ProcInputGUI
     // String variable
     private String treatmentStr = "Treatment:";
     private String procedureStr = "ICD9 Procedure:";
+    private String invalidEntryStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid value(s) entered. Fields cannot be empty and "
+            + "values entered must match those that are listed. Please "
+            + "try again.</p></body></html>";
+    private String validEntryStr0;
+    private String validEntryStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validEntryStr2
+            = "' has been added successfully.</p></body></html>";
+
     private ArrayList<String> treatmentList;
     private ArrayList<String> procedureList;
     
@@ -164,6 +175,8 @@ public class TreatmentICD9ProcInputGUI
             String procedure = procedureCB.getSelectedItem().toString();
             try 
             {
+                medicalClinicDB.isFieldEmpty(treatment);
+                medicalClinicDB.isFieldEmpty(procedure);
                 String treatmentID = medicalClinicDB.determineTreatmentID
                     (treatment);
                 String procedureID = medicalClinicDB.determineProcedureID
@@ -171,10 +184,21 @@ public class TreatmentICD9ProcInputGUI
                 medicalClinicDB.addTreatmentICD9Procedure(null, treatmentID, 
                         procedureID);
                 clearFields();
+                validEntryStr0 = validEntryStr1 + treatment + 
+                        validEntryStr2;
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidEntryStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                JOptionPane.showMessageDialog(null, invalidEntryStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+                Logger.getLogger(TreatmentICD9ProcInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

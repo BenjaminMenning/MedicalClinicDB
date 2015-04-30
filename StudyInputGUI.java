@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -47,6 +48,14 @@ public class StudyInputGUI
         
     // String variable
     private String studyStr = "Study:";
+    private String invalidStudyStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid study entered. Study field cannot be"
+            + " empty. Please enter a valid study.</p></body></html>";
+    private String validStudyStr0;
+    private String validStudyStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validStudyStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField studyTF;                                    
@@ -114,7 +123,7 @@ public class StudyInputGUI
         basePanel.add(addStudyButtonP);
         return basePanel;
     }
-    
+
     /**
      * This method clears the fields within the input panel.
      * 
@@ -123,7 +132,7 @@ public class StudyInputGUI
     {
         studyTF.setText("");
     }
-        
+    
     /** 
      * This class performs the action of adding an study by pressing
      * a button.
@@ -138,12 +147,22 @@ public class StudyInputGUI
             String study = studyTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(study);
                 medicalClinicDB.addStudy(null, study);
                 clearFields();
+                validStudyStr0 = validStudyStr1 + study + 
+                        validStudyStr2;
+                JOptionPane.showMessageDialog(null, validStudyStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidStudyStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(StudyInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }

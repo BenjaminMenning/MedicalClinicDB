@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -49,6 +50,10 @@ public class VisitFileInputGUI extends VisitMiscInputGUI
         
     // String and ArrayList of string variables for studies
     private String fileStr = "File Name:";
+    private String invalidEntryStr0 =  "<html><body><p style='width: "
+            + "200px;'>Invalid value(s) entered. Fields cannot be empty and "
+            + "values entered for the clinic number must match those that are "
+            + "listed. Please try again.</p></body></html>";
     private ArrayList<String> fileList;
     
     // JTextField varables
@@ -142,6 +147,8 @@ public class VisitFileInputGUI extends VisitMiscInputGUI
             String file = fileTF.getText().toString();
             try 
             {
+                medicalClinicDB.isFieldEmpty(visitNumber);
+                medicalClinicDB.isFieldEmpty(file);
                 String visitID = medicalClinicDB.determineVisitID(visitNumber);
                 String patientID = medicalClinicDB.determinePatientIDVisit
                         (visitNumber);
@@ -150,9 +157,20 @@ public class VisitFileInputGUI extends VisitMiscInputGUI
                 medicalClinicDB.addVisitFile(null, 
                         visitID, fileID);
                 clearFields();
+                validEntryStr0 = validEntryStr1 + file + 
+                        validEntryStr2;
+                JOptionPane.showMessageDialog(null, validEntryStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
+                JOptionPane.showMessageDialog(null, invalidEntryStr0, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
                 Logger.getLogger(VisitFileInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }

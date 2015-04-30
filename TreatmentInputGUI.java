@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -47,6 +48,14 @@ public class TreatmentInputGUI
         
     // String variable
     private String treatmentStr = "Treatment:";
+    private String invalidTreatmentStr =  "<html><body><p style='width: "
+            + "200px;'>Invalid treatment entered. Treatment field cannot be"
+            + " empty. Please enter a valid treatment.</p></body></html>";
+    private String validTreatmentStr0;
+    private String validTreatmentStr1 = "<html><body><p style='width: "
+            + "200px;'>'";
+    private String validTreatmentStr2
+            = "' has been added successfully.</p></body></html>";
     
     // JTextField varables
     private JTextField treatmentTF;                                    
@@ -123,7 +132,7 @@ public class TreatmentInputGUI
     {
         treatmentTF.setText("");
     }
-        
+            
     /** 
      * This class performs the action of adding an treatment by pressing
      * a button.
@@ -138,12 +147,22 @@ public class TreatmentInputGUI
             String treatment = treatmentTF.getText();
             try 
             {
+                medicalClinicDB.isFieldEmpty(treatment);
                 medicalClinicDB.addTreatment(null, treatment);
                 clearFields();
+                validTreatmentStr0 = validTreatmentStr1 + treatment + 
+                        validTreatmentStr2;
+                JOptionPane.showMessageDialog(null, validTreatmentStr0, 
+                        "Success", JOptionPane.INFORMATION_MESSAGE);        
             } 
+            catch (IllegalArgumentException ex)
+            {
+                JOptionPane.showMessageDialog(null, invalidTreatmentStr, 
+                        "Error", JOptionPane.ERROR_MESSAGE);        
+            }
             catch (SQLException ex) 
             {
-                Logger.getLogger(VisitTRInputGUI.class.getName()).
+                Logger.getLogger(TreatmentInputGUI.class.getName()).
                         log(Level.SEVERE, null, ex);
             }
         }
