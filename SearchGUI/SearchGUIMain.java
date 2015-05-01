@@ -162,9 +162,8 @@ public class SearchGUIMain {
 					JTable target = (JTable) e.getSource();
 					int row = target.getSelectedRow();
 					Integer patientId = Integer.parseInt((String) table.getModel().getValueAt(row, 0));
-
-					SearchGUIPatientInfo frame = new SearchGUIPatientInfo(
-							patientId);
+					
+					SearchGUIPatientInfo frame = new SearchGUIPatientInfo(patientId);
 					frame.setVisible(true);
 
 				}
