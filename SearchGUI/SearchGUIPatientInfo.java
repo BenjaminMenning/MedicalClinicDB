@@ -34,7 +34,7 @@ public class SearchGUIPatientInfo extends JFrame {
 	private String[] columnNames = { "ID", "Visit Number",
 			"Date", "Provider"};
 
-	private Object[][] data = { { "1", "8AR5GY94", "1900-01-01", "Jennifer H Catflisch" } };
+	private Object[][] data = { { "", "", "", "" } };
 
 	private Map<String, String> terms = new HashMap<String, String>();
 
@@ -47,7 +47,7 @@ public class SearchGUIPatientInfo extends JFrame {
 	
 	private String[] columnNamesTreatment = { "ID", "Treatment"};
 
-	private Object[][] dataTreatment = { { "1", "Test" } };
+	private Object[][] dataTreatment = { { "", "" } };
 	
 	private DefaultTableModel tableModelTreatment = new DefaultTableModel(dataTreatment,
 			columnNamesTreatment) {
@@ -58,10 +58,10 @@ public class SearchGUIPatientInfo extends JFrame {
 	
 	
 	private JTable tblTreatment;
-	private JLabel lblVisitNum = new JLabel("1234ABCD");
-	private JLabel lblVisitProvider = new JLabel("Jennifer H Chanitigian");
-	private JLabel lblAnalysis = new JLabel("1900-01-01");
-	private JLabel lblProcessing = new JLabel("1900-01-01");
+	private JLabel lblVisitNum = new JLabel();
+	private JLabel lblVisitProvider = new JLabel();
+	private JLabel lblAnalysis = new JLabel();
+	private JLabel lblProcessing = new JLabel();
 	private JTextArea txtDiagnosis = new JTextArea();
 	JTextArea txtStudy = new JTextArea();
 	JTextArea txtSystem = new JTextArea();
@@ -209,6 +209,15 @@ public class SearchGUIPatientInfo extends JFrame {
 							int row = target.getSelectedRow();
 							Integer visitId = Integer.parseInt((String) tableVisits.getModel().getValueAt(row, 0));
 							
+							//empty field first
+							lblVisitNum.setText(" ");
+							lblVisitProvider.setText(" ");
+							lblAnalysis.setText(" ");
+							lblProcessing.setText(" ");
+							txtDiagnosis.setText(" ");
+							txtStudy.setText(" ");
+							txtSystem.setText(" ");
+							
 							try {
 								vinfo.getVisit(visitId);
 							} catch (SQLException e1) {
@@ -226,29 +235,26 @@ public class SearchGUIPatientInfo extends JFrame {
 								tmp += vinfo.diagnosis.get(i) + "\n";
 							}
 							txtDiagnosis.setText(tmp);
-							
-							
 							tmp = "";
+							
+							
 							for (int i = 0; i < vinfo.study.size(); i++) {
 								tmp += vinfo.study.get(i) + "\n";
 							}
 							txtStudy.setText(tmp);
-							
-							
 							tmp = "";
+							
 							for (int i = 0; i < vinfo.system.size(); i++) {
 								tmp += vinfo.system.get(i) + "\n";
 							}
 							txtSystem.setText(tmp);
+							tmp = "";
 							
 							tableModelTreatment.setRowCount(0);
 
 							List<Vector<String>> procedureData = null;
 
 							procedureData = vinfo.treatment;
-
-							System.out.println("Number of data tiems:"
-									+ procedureData.size());
 
 							for (int i = 0; i < procedureData.size(); ++i) {
 								tableModelTreatment.addRow(procedureData.get(i));
@@ -263,10 +269,7 @@ public class SearchGUIPatientInfo extends JFrame {
 				List<Vector<String>> visitData = null;
 
 				visitData = pinfo.visits;
-
-				System.out.println("Number of data tiems:"
-						+ visitData.size());
-
+				
 				for (int i = 0; i < visitData.size(); ++i) {
 					tableModel.addRow(visitData.get(i));
 				}
@@ -314,7 +317,6 @@ public class SearchGUIPatientInfo extends JFrame {
 		
 		
 		scrollPane_1.setViewportView(txtDiagnosis);
-		txtDiagnosis.setText("00320 - Localized salmonella infection, unspecified");
 		txtDiagnosis.setEditable(false);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -324,7 +326,6 @@ public class SearchGUIPatientInfo extends JFrame {
 		
 		
 		scrollPane_2.setViewportView(txtStudy);
-		txtStudy.setText("Muscle/Bone/Cartilage");
 		txtStudy.setEditable(false);
 		
 		JScrollPane scrollPane_3 = new JScrollPane();
@@ -334,7 +335,6 @@ public class SearchGUIPatientInfo extends JFrame {
 		
 		
 		scrollPane_3.setViewportView(txtSystem);
-		txtSystem.setText("Blood Pressure Monitor");
 		txtSystem.setEditable(false);
 		
 		JLabel lblDiagnosis = new JLabel("Diagnosis");
@@ -364,7 +364,6 @@ public class SearchGUIPatientInfo extends JFrame {
 		
 		
 		scrollPane_5.setViewportView(txtProcedures);
-		txtProcedures.setText("0001 - Therapeutic ultrasound of vessels of head and neck");
 		txtProcedures.setEditable(false);
 		
 		JLabel lblTreatmentDetails = new JLabel("Treatment Procedures");
@@ -392,7 +391,9 @@ public class SearchGUIPatientInfo extends JFrame {
 							JTable target = (JTable) e.getSource();
 							int row = target.getSelectedRow();
 							Integer treatmentId = Integer.parseInt((String) tblTreatment.getModel().getValueAt(row, 0));
-		
+							
+							txtProcedures.setText("");
+							
 							try {
 								vinfo.getProcedure(treatmentId);
 								

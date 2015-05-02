@@ -64,8 +64,7 @@ public class SearchGUIMain {
 	private String[] columnNames = { "Patient ID", "Clinic Number",
 			"First Name", "Last Name", "Gender", "DOB", "Provider" };
 
-	private Object[][] data = { { "1", "0-000-000", "Testy", "McTester", "T",
-			"William Williamson", "01/01/1978" } };
+	private Object[][] data = { { "", "", "", "", "", "", "" } };
 
 	private Map<String, String> terms = new HashMap<String, String>();
 
