@@ -45,8 +45,30 @@ public class SearchGUIPatientInfo extends JFrame {
 		}
 	};
 	
-	SearchGUIPatientInfoDB pinfo = new SearchGUIPatientInfoDB();
+	private String[] columnNamesTreatment = { "ID", "Treatment"};
 
+	private Object[][] dataTreatment = { { "1", "Test" } };
+	
+	private DefaultTableModel tableModelTreatment = new DefaultTableModel(dataTreatment,
+			columnNamesTreatment) {
+		public boolean isCellEditable(int row, int column) {
+			return false;
+		}
+	};
+	
+	
+	private JTable tblTreatment;
+	private JLabel lblVisitNum = new JLabel("1234ABCD");
+	private JLabel lblVisitProvider = new JLabel("Jennifer H Chanitigian");
+	private JLabel lblAnalysis = new JLabel("1900-01-01");
+	private JLabel lblProcessing = new JLabel("1900-01-01");
+	private JTextArea txtDiagnosis = new JTextArea();
+	JTextArea txtStudy = new JTextArea();
+	JTextArea txtSystem = new JTextArea();
+	JTextArea txtProcedures = new JTextArea();
+	
+	SearchGUIPatientInfoDB pinfo = new SearchGUIPatientInfoDB();
+	SearchGUIVisitInfoDB vinfo = new SearchGUIVisitInfoDB();
 	/**
 	 * Create the frame.
 	 */
@@ -60,7 +82,7 @@ public class SearchGUIPatientInfo extends JFrame {
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 675, 600);
+		setBounds(100, 100, 675, 711);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -175,6 +197,7 @@ public class SearchGUIPatientInfo extends JFrame {
 				return false;
 			}
 		};
+		
 		scrollPane.setViewportView(tableVisits);
 		tableVisits.setRowSelectionAllowed(true);
 		tableVisits.setShowVerticalLines(false);
@@ -184,11 +207,52 @@ public class SearchGUIPatientInfo extends JFrame {
 						if (e.getClickCount() == 2) {
 							JTable target = (JTable) e.getSource();
 							int row = target.getSelectedRow();
-							Integer patientId = Integer.parseInt((String) tableVisits.getModel().getValueAt(row, 0));
-		
-							SearchGUIPatientInfo frame = new SearchGUIPatientInfo(patientId);
-							frame.setVisible(true);
-		
+							Integer visitId = Integer.parseInt((String) tableVisits.getModel().getValueAt(row, 0));
+							
+							try {
+								vinfo.getVisit(visitId);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+							lblVisitNum.setText(vinfo.visitNumber);
+							lblVisitProvider.setText(vinfo.provider);
+							lblAnalysis.setText(vinfo.analysisDate);
+							lblProcessing.setText(vinfo.processingDate);
+							
+							String tmp = "";
+							for (int i = 0; i < vinfo.diagnosis.size(); i++) {
+								tmp += vinfo.diagnosis.get(i) + "\n";
+							}
+							txtDiagnosis.setText(tmp);
+							
+							
+							tmp = "";
+							for (int i = 0; i < vinfo.study.size(); i++) {
+								tmp += vinfo.study.get(i) + "\n";
+							}
+							txtStudy.setText(tmp);
+							
+							
+							tmp = "";
+							for (int i = 0; i < vinfo.system.size(); i++) {
+								tmp += vinfo.system.get(i) + "\n";
+							}
+							txtSystem.setText(tmp);
+							
+							tableModelTreatment.setRowCount(0);
+
+							List<Vector<String>> procedureData = null;
+
+							procedureData = vinfo.treatment;
+
+							System.out.println("Number of data tiems:"
+									+ procedureData.size());
+
+							for (int i = 0; i < procedureData.size(); ++i) {
+								tableModelTreatment.addRow(procedureData.get(i));
+							}
 						}
 					}
 				});
@@ -206,8 +270,148 @@ public class SearchGUIPatientInfo extends JFrame {
 				for (int i = 0; i < visitData.size(); ++i) {
 					tableModel.addRow(visitData.get(i));
 				}
+		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(6, 330, 663, 6);
 		contentPane.add(separator_1);
+		
+		JLabel lblVisitDetails = new JLabel("Visit Details");
+		lblVisitDetails.setFont(new Font("Lucida Grande", Font.ITALIC, 18));
+		lblVisitDetails.setBounds(6, 348, 111, 27);
+		contentPane.add(lblVisitDetails);
+		
+		
+		lblVisitNum.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblVisitNum.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
+		lblVisitNum.setBounds(558, 355, 111, 16);
+		contentPane.add(lblVisitNum);
+		
+		
+		lblVisitProvider.setHorizontalAlignment(SwingConstants.TRAILING);
+		lblVisitProvider.setBounds(514, 377, 155, 16);
+		contentPane.add(lblVisitProvider);
+		
+		JLabel lblAnalysisComplete = new JLabel("Analysis Complete:");
+		lblAnalysisComplete.setBounds(6, 377, 121, 16);
+		contentPane.add(lblAnalysisComplete);
+		
+		JLabel lblProcessingComplete = new JLabel("Processing Complete:");
+		lblProcessingComplete.setBounds(6, 396, 136, 16);
+		contentPane.add(lblProcessingComplete);
+		
+		
+		lblAnalysis.setBounds(151, 377, 80, 16);
+		contentPane.add(lblAnalysis);
+		
+		
+		lblProcessing.setBounds(151, 396, 80, 16);
+		contentPane.add(lblProcessing);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setBounds(6, 457, 335, 95);
+		contentPane.add(scrollPane_1);
+		
+		
+		scrollPane_1.setViewportView(txtDiagnosis);
+		txtDiagnosis.setText("00320 - Localized salmonella infection, unspecified");
+		txtDiagnosis.setEditable(false);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_2.setBounds(353, 457, 155, 95);
+		contentPane.add(scrollPane_2);
+		
+		
+		scrollPane_2.setViewportView(txtStudy);
+		txtStudy.setText("Muscle/Bone/Cartilage");
+		txtStudy.setEditable(false);
+		
+		JScrollPane scrollPane_3 = new JScrollPane();
+		scrollPane_3.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_3.setBounds(514, 457, 155, 95);
+		contentPane.add(scrollPane_3);
+		
+		
+		scrollPane_3.setViewportView(txtSystem);
+		txtSystem.setText("Blood Pressure Monitor");
+		txtSystem.setEditable(false);
+		
+		JLabel lblDiagnosis = new JLabel("Diagnosis");
+		lblDiagnosis.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblDiagnosis.setBounds(6, 434, 89, 22);
+		contentPane.add(lblDiagnosis);
+		
+		JLabel lblTreatment = new JLabel("Treatment");
+		lblTreatment.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblTreatment.setBounds(6, 564, 89, 16);
+		contentPane.add(lblTreatment);
+		
+		JLabel lblStudy = new JLabel("Study\n");
+		lblStudy.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblStudy.setBounds(350, 437, 51, 16);
+		contentPane.add(lblStudy);
+		
+		JLabel lblSystem = new JLabel("System\n");
+		lblSystem.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblSystem.setBounds(511, 437, 61, 16);
+		contentPane.add(lblSystem);
+		
+		JScrollPane scrollPane_5 = new JScrollPane();
+		scrollPane_5.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_5.setBounds(353, 586, 316, 97);
+		contentPane.add(scrollPane_5);
+		
+		
+		scrollPane_5.setViewportView(txtProcedures);
+		txtProcedures.setText("0001 - Therapeutic ultrasound of vessels of head and neck");
+		txtProcedures.setEditable(false);
+		
+		JLabel lblTreatmentDetails = new JLabel("Treatment Procedures");
+		lblTreatmentDetails.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblTreatmentDetails.setBounds(353, 565, 180, 16);
+		contentPane.add(lblTreatmentDetails);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		scrollPane_4.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_4.setBounds(6, 585, 335, 98);
+		contentPane.add(scrollPane_4);
+		
+		tblTreatment = new JTable(tableModelTreatment) {
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
+		
+		tblTreatment.setRowSelectionAllowed(true);
+		tblTreatment.setShowVerticalLines(false);
+		tblTreatment.getColumnModel().getColumn(0).setPreferredWidth(10);
+		tblTreatment.addMouseListener(new MouseAdapter() {
+					public void mouseClicked(MouseEvent e) {
+						if (e.getClickCount() == 2) {
+							JTable target = (JTable) e.getSource();
+							int row = target.getSelectedRow();
+							Integer treatmentId = Integer.parseInt((String) tblTreatment.getModel().getValueAt(row, 0));
+		
+							try {
+								vinfo.getProcedure(treatmentId);
+								
+								String tmp = "";
+								for (int i = 0; i < vinfo.treatment.size(); i++) {
+									tmp += vinfo.treatment.get(i) + "\n";
+								}
+								txtProcedures.setText(tmp);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+		
+						}
+					}
+				});
+		
+		scrollPane_4.setViewportView(tblTreatment);		
+		
 	}
+	
 }
