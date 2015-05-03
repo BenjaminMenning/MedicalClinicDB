@@ -117,7 +117,8 @@ public class SearchGUIMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 700, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		txtFldDiagnosis = new JTextField();
@@ -456,5 +457,15 @@ public class SearchGUIMain {
 		lblPatientSearch.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 		lblPatientSearch.setBounds(6, 17, 150, 30);
 		frame.getContentPane().add(lblPatientSearch);
+                frame.setTitle("Patient Search");
 	}
+        
+    /**
+     * This method prepares the search GUI frame to be displayed
+     * 
+     */
+    public void prepareFrame()
+        {
+            frame.setVisible(true);
+        }
 }

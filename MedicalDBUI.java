@@ -1,10 +1,12 @@
 package MedicalClinicDB;
 
+import MedicalClinicDB.SearchGUI.SearchGUIMain;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -69,13 +71,15 @@ public class MedicalDBUI
     private String treatmentICD9ProcInputStr = "Add a ICD9 Procedure to a "
             + "Treatment";
                                 
+    // String variable for JFrame title
+    private String inputTitleStr = "Medical Clinic Database Input";
+    
     // Patient JPanel variables
     private JPanel patientInputComboP;
     private JPanel patientInputPanel;
     private JPanel patientADInputPanel;
     private JPanel patientConditionInputPanel;
     private JPanel patientHCPInputPanel;
-    private JPanel patientSearchPanel;
     private JPanel patientInputPanels;
     private JPanel patientInputTabP;
     
@@ -137,6 +141,12 @@ public class MedicalDBUI
     private TreatmentInputGUI treatmentInputGUI;
     private TreatmentICD9ProcInputGUI treatmentICD9ProcInputGUI;
     
+    // JButton variables
+    private JButton searchPatientB;
+    
+    // JButton Handlers
+    private searchPatientButtonHandler searchPatientH;
+    
     // Patient Input JComboBox and String variables
     private JComboBox patientInputCombo = new JComboBox();
     private String patientComboBoxItems[] = {patientInputStr, patientADInputStr, 
@@ -195,6 +205,12 @@ public class MedicalDBUI
         patientInputComboP = new JPanel();
         patientInputComboP.add(patientInputCombo);   
         
+        // Initialize search patient JButton and JButton handler
+        searchPatientB = new JButton("Search for a Patient");
+        searchPatientH = new searchPatientButtonHandler();
+        searchPatientB.addActionListener(searchPatientH);
+        patientInputComboP.add(searchPatientB);
+                
         // Creates visit JComboBox, initializes it, and adds it to panel
         visitInputCombo = new JComboBox(visitComboBoxItems);
         visitInputCombo.setEditable(false);
@@ -340,13 +356,29 @@ public class MedicalDBUI
         tabbedPane.addTab("Patient Input", patientInputTabP);
         tabbedPane.addTab("Visit Input", visitInputTabP);
         tabbedPane.addTab("Miscellaneous Input", miscInputTabP);
-        tabbedPane.addTab("Patient Search", patientSearchPanel);
         
         // Initialize JFrame properties
+        medicalDBUIFrame.setTitle(inputTitleStr);
         medicalDBUIFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         medicalDBUIFrame.add(tabbedPane);
         medicalDBUIFrame.pack();
         medicalDBUIFrame.setVisible(true);
         medicalDBUIFrame.setLocationRelativeTo(null);
+    }
+    
+    /** 
+     * This class performs the action of opening a new window to search for a
+     * patient.
+     * 
+     * @author Benjamin Menning, Dan Johnson, Holly Schreader
+     * @version 05/05/2015
+     */
+    private class searchPatientButtonHandler implements ActionListener
+    {
+        public void actionPerformed(ActionEvent e)
+        {
+            SearchGUIMain window = new SearchGUIMain();
+            window.prepareFrame();
+        }
     }
 }

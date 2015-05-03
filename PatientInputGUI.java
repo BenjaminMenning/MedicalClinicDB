@@ -105,7 +105,6 @@ public class PatientInputGUI
     
     // JButton variables
     private JButton addPatientB;
-    private JButton searchPatientB;
     
     // JComboBox variables
     private JComboBox genderCB = new JComboBox(genderStrings);
@@ -114,7 +113,7 @@ public class PatientInputGUI
     // JButton Handlers
     private addPatientButtonHandler addPatientH;
                         
-    //JPanel variables
+    // JPanel variables
     private JPanel patientIDP;
     private JPanel clinicNumberP;
     private JPanel firstNameP, middleNameP, lastNameP;                                    
@@ -123,7 +122,7 @@ public class PatientInputGUI
     private JPanel heightP;
     private JPanel weightP;
     private JPanel addPatientButtonP;
-        
+            
     // Medical Clinic database object
     private MedicalClinicDB medicalClinicDB;
     
@@ -161,7 +160,7 @@ public class PatientInputGUI
         heightTF = new JTextField(20);
         weightTF = new JTextField(20);
         
-        // Initialize JButton and JButton handler
+        // Initialize add patient JButton and JButton handler
         addPatientB = new JButton("Add Patient");
         addPatientH = new addPatientButtonHandler();
         addPatientB.addActionListener(addPatientH);
@@ -169,7 +168,7 @@ public class PatientInputGUI
 //        addPatientList.addActionListener();        
         addPatientButtonP = new JPanel();
         addPatientButtonP.add(addPatientB);
-        
+                
         // Set optional layout
         int rows = 1;
         int columns = 2;
@@ -378,7 +377,7 @@ public class PatientInputGUI
             }
         }
     }
-            
+    
     /**
      * This constructor contains a parameter to assign the medical clinic 
      * database for the patient input GUI.
