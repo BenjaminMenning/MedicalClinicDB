@@ -82,6 +82,7 @@ public class ICD9ProcedureInputGUI
     
     // Declares medical clinic database object
     protected MedicalClinicDB medicalClinicDB;
+    private TreatmentICD9ProcInputGUI treatmentICD9ProcInputGUI;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
@@ -89,9 +90,11 @@ public class ICD9ProcedureInputGUI
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public ICD9ProcedureInputGUI(MedicalClinicDB medicalClinicObj)
+    public ICD9ProcedureInputGUI(MedicalClinicDB medicalClinicObj, 
+            TreatmentICD9ProcInputGUI treatmentICD9ProcInputGUIObj)
     {
         medicalClinicDB = medicalClinicObj;
+        treatmentICD9ProcInputGUI = treatmentICD9ProcInputGUIObj;
     }
     
     /**
@@ -172,7 +175,8 @@ public class ICD9ProcedureInputGUI
                 validProcedureStr0 = validProcedureStr1 + icd9Description + 
                         validProcedureStr2;
                 JOptionPane.showMessageDialog(null, validProcedureStr0, 
-                        "Success", JOptionPane.INFORMATION_MESSAGE);        
+                        "Success", JOptionPane.INFORMATION_MESSAGE); 
+                treatmentICD9ProcInputGUI.updateProcedureList(icd9Description);
             } 
             catch (IllegalArgumentException ex)
             {

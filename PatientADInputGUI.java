@@ -131,6 +131,17 @@ public class PatientADInputGUI extends PatientMiscInputGUI
         super.clearFields();
         assistiveDeviceCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of assistive devices.
+     * 
+     * @param newAssisDev   the assistive device to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateADList(String newAssisDev) throws SQLException
+    {
+        assistiveDeviceCB.addItem(newAssisDev);
+    }
         
     /** 
      * This class performs the action of adding an assistive device by pressing

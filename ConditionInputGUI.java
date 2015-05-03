@@ -73,6 +73,7 @@ public class ConditionInputGUI
     
     // Declares medical clinic database object
     protected MedicalClinicDB medicalClinicDB;
+    private PatientConditionInputGUI patientConditionInputGUI;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
@@ -80,9 +81,11 @@ public class ConditionInputGUI
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public ConditionInputGUI(MedicalClinicDB medicalClinicObj)
+    public ConditionInputGUI(MedicalClinicDB medicalClinicObj, 
+            PatientConditionInputGUI patientConditionInputGUIObj)
     {
         medicalClinicDB = medicalClinicObj;
+        patientConditionInputGUI = patientConditionInputGUIObj;
     }
     
     /**
@@ -153,7 +156,8 @@ public class ConditionInputGUI
                 validConditionStr0 = validConditionStr1 + condition + 
                         validConditionStr2;
                 JOptionPane.showMessageDialog(null, validConditionStr0, 
-                        "Success", JOptionPane.INFORMATION_MESSAGE);        
+                        "Success", JOptionPane.INFORMATION_MESSAGE);  
+                patientConditionInputGUI.updateConditionList(condition);
             } 
             catch (IllegalArgumentException ex)
             {

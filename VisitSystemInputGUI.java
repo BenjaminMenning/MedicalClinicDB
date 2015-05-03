@@ -131,6 +131,17 @@ public class VisitSystemInputGUI extends VisitMiscInputGUI
         super.clearFields();
         systemCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of systems.
+     * 
+     * @param newSystem   the system to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateSystemList(String newSystem) throws SQLException
+    {
+        systemCB.addItem(newSystem);
+    }
         
     /** 
      * This class performs the action of adding an system by pressing

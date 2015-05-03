@@ -81,6 +81,7 @@ public class ProviderInputGUI
     
     // Declares medical clinic database object
     protected MedicalClinicDB medicalClinicDB;
+    private PatientHCPInputGUI patientHCPInputGUI;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
@@ -88,9 +89,11 @@ public class ProviderInputGUI
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public ProviderInputGUI(MedicalClinicDB medicalClinicObj)
+    public ProviderInputGUI(MedicalClinicDB medicalClinicObj, PatientHCPInputGUI 
+            patientHCPInputGUIObj)
     {
         medicalClinicDB = medicalClinicObj;
+        patientHCPInputGUI = patientHCPInputGUIObj;
     }
     
     /**
@@ -181,7 +184,8 @@ public class ProviderInputGUI
                 validNameStr0 = validNameStr1 + name + 
                         validNameStr2;
                 JOptionPane.showMessageDialog(null, validNameStr0, 
-                        "Success", JOptionPane.INFORMATION_MESSAGE);        
+                        "Success", JOptionPane.INFORMATION_MESSAGE);  
+                patientHCPInputGUI.updateProviderList(name);
             } 
             catch (IllegalArgumentException ex)
             {

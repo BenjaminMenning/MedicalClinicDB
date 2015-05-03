@@ -131,6 +131,17 @@ public class VisitTreatmentInputGUI extends VisitMiscInputGUI
         super.clearFields();
         treatmentCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of treatments.
+     * 
+     * @param newTreatment   the treatment to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateTreatmentList(String newTreatment) throws SQLException
+    {
+        treatmentCB.addItem(newTreatment);
+    }
         
     /** 
      * This class performs the action of adding an treatment by pressing

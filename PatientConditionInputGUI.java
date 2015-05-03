@@ -131,6 +131,17 @@ public class PatientConditionInputGUI extends PatientMiscInputGUI
         super.clearFields();
         conditionCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of conditions.
+     * 
+     * @param newCondition   the condition to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateConditionList(String newCondition) throws SQLException
+    {
+        conditionCB.addItem(newCondition);
+    }
         
     /** 
      * This class performs the action of adding an condition by pressing

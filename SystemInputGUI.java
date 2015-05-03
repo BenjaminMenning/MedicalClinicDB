@@ -73,6 +73,7 @@ public class SystemInputGUI
     
     // Declares medical clinic database object
     protected MedicalClinicDB medicalClinicDB;
+    private VisitSystemInputGUI visitSystemInputGUI;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
@@ -80,9 +81,11 @@ public class SystemInputGUI
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public SystemInputGUI(MedicalClinicDB medicalClinicObj)
+    public SystemInputGUI(MedicalClinicDB medicalClinicObj, VisitSystemInputGUI
+            visitSystemInputGUIObj)
     {
         medicalClinicDB = medicalClinicObj;
+        visitSystemInputGUI = visitSystemInputGUIObj;
     }
     
     /**
@@ -153,7 +156,8 @@ public class SystemInputGUI
                 validSystemStr0 = validSystemStr1 + system + 
                         validSystemStr2;
                 JOptionPane.showMessageDialog(null, validSystemStr0, 
-                        "Success", JOptionPane.INFORMATION_MESSAGE);        
+                        "Success", JOptionPane.INFORMATION_MESSAGE); 
+                visitSystemInputGUI.updateSystemList(system);
             } 
             catch (IllegalArgumentException ex)
             {

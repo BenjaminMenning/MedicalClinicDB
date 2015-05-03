@@ -1,6 +1,5 @@
 package MedicalClinicDB;
 
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,33 +16,49 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/** 
+ * Author:          Benjamin Menning, Dan Johnson, Holly Schreader
+ * 
+ * Date:            05/05/2015 
+ *                
+ * Course:          CS 485 - 01, Spring 2015
+ * 
+ * Assignment:      Database Project
+ * 
+ * Description:     This program is a medical database program that utilizes a
+ *                  MySQL relational database management system to allow users
+ *                  to input and view information about patients and visits.
+ *                  It allows users to input information on a wide variety of 
+ *                  things, including patient conditions and assistive devices,
+ *                  visit diagnoses and studies, as well as information about
+ *                  healthcare providers or systems used. It also allows a user
+ *                  to search and lookup information about patients based on a
+ *                  wide variety of criteria like name, diagnoses, date of birth
+ *                  and more. It also allows users to see more detailed 
+ *                  information about patients and their visits.
  */
 
-/**
- *
- * @author Ben
+/** 
+ * This class allows a user to enter information about a visit.
+ * 
+ * @author Benjamin Menning, Dan Johnson, Holly Schreader
+ * @version 05/05/2015 
  */
 public class VisitInputGUI extends PatientHCPInputGUI
-{
-    //Window size
-    private static final int WIDTH = 450;                               
-    private static final int HEIGHT = 425;                             
-        
-    //JLabel variables
+{        
+    // JLabel variables
     private JLabel visitNumberL;
     private JLabel visitDateL;                                    
     private JLabel dateAnalysisCompleteL;
     private JLabel dateProcessingCompleteL;
     
+    // String variables for JLabels
     private String visitNumberStr = "Visit Number(XXXXXXXX):";
     private String visitDateStr = "Visit Date(YYYY-MM-DD):";                                    
     private String dateAnalysisCompleteStr = "Date Analysis Complete:";
     private String dateProcessingCompleteStr = "Date Processing Complete:";
     
+    // String variables for error messages
     private String errorStr = "";
     private String emptyFieldsStr =  "<html><body><p style='width: "
             + "200px;'>Invalid value(s) entered. Fields cannot be empty. "
@@ -72,50 +87,65 @@ public class VisitInputGUI extends PatientHCPInputGUI
     private String validEntryStr0 = "<html><body><p style='width: "
             + "200px;'>Visit has been added successfully.</p></body></html>";
             
-    //JTextField varables
+    // JTextField varables
     private JTextField visitNumberTF;
     private JTextField visitDateTF;                                    
     private JTextField dateAnalysisCompleteTF;
     private JTextField dateProcessingCompleteTF;
     
-    
-    //JButton variables
+    // JButton variables
     private JButton addVisitB;
         
+    // JButton Handler variables
     private addVisitButtonHandler addVisitH;
                         
-    //JPanel variables
+    // JPanel variables
     private JPanel visitNumberP;
     private JPanel visitDateP;                                    
     private JPanel dateAnalysisCompleteP;
     private JPanel dateProcessingCompleteP;
     private JPanel addVisitButtonP;
         
+    /**
+     * This method creates and retrieves the components for a visit 
+     * input panel.
+     * 
+     * @return JPanel   returns the JPanel containing visit components
+     */
     public JPanel createInputPanel() throws SQLException
     {
+        // Calls the patient HCP superclass method
         super.createInputPanel();
+        
+        // Declare overall JPanel and set layout
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(10,1)); 
         
+        // Initialize JLabels
         visitNumberL = new JLabel(visitNumberStr, SwingConstants.LEFT);
         visitDateL = new JLabel(visitDateStr, SwingConstants.LEFT);
         dateAnalysisCompleteL = new JLabel(dateAnalysisCompleteStr, SwingConstants.LEFT);
         dateProcessingCompleteL = new JLabel(dateProcessingCompleteStr, SwingConstants.LEFT);
 
+        // Initialize JTextFields
         visitNumberTF = new JTextField(20);
         visitDateTF = new JTextField(20);
         dateAnalysisCompleteTF = new JTextField(20);
         dateProcessingCompleteTF = new JTextField(20);
         
+        // Initialize JButtons and JButton Handlers
         addVisitB = new JButton("Add Visit");
         addVisitH = new addVisitButtonHandler();
         addVisitB.addActionListener(addVisitH);
         addVisitButtonP = new JPanel();
         addVisitButtonP.add(addVisitB);
         
+        // Set optional layout for components
         int rows = 1;
         int columns = 2;
         GridLayout gridLayout = new GridLayout(rows, columns);
+        
+        // Initialize JPanels and add JPanel components
         visitNumberP = new JPanel();
 //        visitNumberP.setLayout(gridLayout);
         visitNumberP.add(visitNumberL);
@@ -133,6 +163,7 @@ public class VisitInputGUI extends PatientHCPInputGUI
         dateProcessingCompleteP.add(dateProcessingCompleteL);
         dateProcessingCompleteP.add(dateProcessingCompleteTF);
         
+        // Nest JPanels within base JPanel
         panel.add(visitNumberP);
         panel.add(visitDateP);
         panel.add(clinicNumberP);
@@ -143,6 +174,10 @@ public class VisitInputGUI extends PatientHCPInputGUI
         return panel;
     }
         
+    /**
+     * This method clears the fields within the input panel.
+     * 
+     */
     public void clearFields()
     {
         super.clearFields();
@@ -170,6 +205,12 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a visit number is valid and throws
+     * an IllegalArgumentException if it isn't.
+     * 
+     * @param visitNum the String of the visit number to be validated
+     */
     public void validateVisitNum(String visitNum)
     {
         String visitNumStr = visitNum;
@@ -180,6 +221,12 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a clinic number is valid and throws
+     * an IllegalArgumentException if it isn't.
+     * 
+     * @param clinicNum the String of the clinic number to be validated
+     */
     public void validateClinicNum(String clinicNum) throws SQLException
     {
         String clinicNumStr = clinicNum;
@@ -192,6 +239,12 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a provider is valid and throws
+     * an IllegalArgumentException if it isn't.
+     * 
+     * @param providerName the String of the provider to be validated
+     */
     public void validateProvider(String providerName) throws SQLException
     {
         String providerNameStr = providerName;
@@ -204,6 +257,13 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a date is valid and throws
+     * an ParseException if it isn't.
+     * 
+     * @param date the String of the date to be validated
+     * @throws java.text.ParseException if date is invalid
+     */
     public void validateDate(String date) throws ParseException
     {
         String dateStr = date;
@@ -220,6 +280,13 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a analysis date is valid and throws
+     * an ParseException if it isn't.
+     * 
+     * @param anlysDate the String of the analysis date to be validated
+     * @throws java.text.ParseException if analysis date is invalid
+     */
     public void validateAnalysisDate(String anlysDate) throws ParseException
     {
         String analysisDateStr = anlysDate;
@@ -236,6 +303,13 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a processing date is valid and 
+     * throws an ParseException if it isn't.
+     * 
+     * @param prcsDate the String of the processing date to be validated
+     * @throws java.text.ParseException if processing date is invalid
+     */
     public void validateProcessingDate(String prcsDate) throws ParseException
     {
         String processingDateStr = prcsDate;
@@ -252,6 +326,13 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
         
+    /** 
+     * This class performs the action of adding a visit by pressing
+     * a button.
+     * 
+     * @author Benjamin Menning, Dan Johnson, Holly Schreader
+     * @version 05/05/2015
+     */
     private class addVisitButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -259,7 +340,8 @@ public class VisitInputGUI extends PatientHCPInputGUI
             String visitNumber = visitNumberTF.getText();
             String visitDate = visitDateTF.getText();
             String clinicNumber = clinicNumberCB.getSelectedItem().toString();
-            String healthcareProvider = healthcareProviderCB.getSelectedItem().toString();
+            String healthcareProvider = healthcareProviderCB.getSelectedItem().
+                    toString();
             String dateAnalysisComplete = dateAnalysisCompleteTF.getText();
             String dateProcessingComplete = dateProcessingCompleteTF.getText();
             try 
@@ -297,18 +379,14 @@ public class VisitInputGUI extends PatientHCPInputGUI
         }
     }
     
+    /**
+     * This constructor contains a parameter to assign the medical clinic 
+     * database for the visit input GUI.
+     * 
+     * @param medicalClinicObj the medical clinic DB to be assigned
+     */
     public VisitInputGUI(MedicalClinicDB medicalClinicObj)
     {
         super(medicalClinicObj);
-    }
-    
-    public static void main(String[] argv) throws SQLException, ParseException 
-    {
-        MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
-        medicalClinicDB.connectToDatabase();
-        VisitInputGUI visitInputGUI = new VisitInputGUI(medicalClinicDB);
-        visitInputGUI.validateVisitNum("ABC4EFG8");
-        visitInputGUI.validateClinicNum("4-234-123");
-        visitInputGUI.validateProvider("Dave WW Boldt");
     }
 }

@@ -1,6 +1,5 @@
 package MedicalClinicDB;
 
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,19 +18,37 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/** 
+ * Author:          Benjamin Menning, Dan Johnson, Holly Schreader
+ * 
+ * Date:            05/05/2015 
+ *                
+ * Course:          CS 485 - 01, Spring 2015
+ * 
+ * Assignment:      Database Project
+ * 
+ * Description:     This program is a medical database program that utilizes a
+ *                  MySQL relational database management system to allow users
+ *                  to input and view information about patients and visits.
+ *                  It allows users to input information on a wide variety of 
+ *                  things, including patient conditions and assistive devices,
+ *                  visit diagnoses and studies, as well as information about
+ *                  healthcare providers or systems used. It also allows a user
+ *                  to search and lookup information about patients based on a
+ *                  wide variety of criteria like name, diagnoses, date of birth
+ *                  and more. It also allows users to see more detailed 
+ *                  information about patients and their visits.
  */
 
-/**
- *
- * @author Ben
+/** 
+ * This class allows a user to enter information about a patient.
+ * 
+ * @author Benjamin Menning, Dan Johnson, Holly Schreader
+ * @version 05/05/2015 
  */
 public class PatientInputGUI 
 {
-    //JLabel variables
+    // JLabel variables
     private JLabel patientIDL;
     private JLabel clinicNumberL;
     private JLabel firstNameL, middleNameL, lastNameL;                                    
@@ -40,9 +57,7 @@ public class PatientInputGUI
     private JLabel heightL;
     private JLabel weightL;
     
-    private JLabel patientConditionIDL;
-    private JLabel conditionL;
-    
+    // String variables for JLabels
     private String patientIDStr = "Patient ID:";
     private String clinicNumberStr = "Clinic Number(X-XXX-XXX):";
     private String firstNameStr = "First Name:";
@@ -53,11 +68,13 @@ public class PatientInputGUI
     private String heightStr = "Height(kg):";
     private String weightStr = "Weight(cm):";
     
+    // Arrays of string variables for JComboBoxes
     private String[] genderStrings = {"M", "F", "T", "O"};
     private String[] addPatientStrings = {"Add Patient", "Add Patient Condition"
             , "Add Patient Healthcare Provider", "Add Patient Assistive Device"
             };
     
+    // String variables for error messages
     private String errorStr = "";
     private String emptyFieldsStr =  "<html><body><p style='width: "
             + "200px;'>Invalid value(s) entered. Fields cannot be empty. "
@@ -77,7 +94,7 @@ public class PatientInputGUI
     private String validEntryStr0 = "<html><body><p style='width: "
             + "200px;'>Patient has been added successfully.</p></body></html>";
     
-    //JTextField varables
+    // JTextField varables
     private JTextField patientIDTF;
     private JTextField clinicNumberTF;
     private JTextField firstNameTF, middleNameTF, lastNameTF;                                    
@@ -86,13 +103,15 @@ public class PatientInputGUI
     private JTextField heightTF;
     private JTextField weightTF;
     
-    //JButton variables
+    // JButton variables
     private JButton addPatientB;
     private JButton searchPatientB;
     
+    // JComboBox variables
     private JComboBox genderCB = new JComboBox(genderStrings);
     private JComboBox addPatientList = new JComboBox(addPatientStrings);
     
+    // JButton Handlers
     private addPatientButtonHandler addPatientH;
                         
     //JPanel variables
@@ -105,13 +124,22 @@ public class PatientInputGUI
     private JPanel weightP;
     private JPanel addPatientButtonP;
         
+    // Medical Clinic database object
     private MedicalClinicDB medicalClinicDB;
     
+    /**
+     * This method creates and retrieves the components for a patient 
+     * input panel.
+     * 
+     * @return JPanel   returns the JPanel containing patient components
+     */
     public JPanel createPatientInputPanel()
     {
+        // Declare overall JPanel and set layout
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(10,1)); 
         
+        // Initialize JLabels
         patientIDL = new JLabel(patientIDStr, SwingConstants.LEFT);
         clinicNumberL = new JLabel(clinicNumberStr, SwingConstants.LEFT);
         firstNameL = new JLabel(firstNameStr, SwingConstants.LEFT);
@@ -122,6 +150,7 @@ public class PatientInputGUI
         heightL = new JLabel(heightStr, SwingConstants.LEFT);
         weightL = new JLabel(weightStr, SwingConstants.LEFT);
 
+        // Initialize JTextFields
         patientIDTF = new JTextField(20);
         clinicNumberTF = new JTextField(20);
         firstNameTF = new JTextField(20);
@@ -132,6 +161,7 @@ public class PatientInputGUI
         heightTF = new JTextField(20);
         weightTF = new JTextField(20);
         
+        // Initialize JButton and JButton handler
         addPatientB = new JButton("Add Patient");
         addPatientH = new addPatientButtonHandler();
         addPatientB.addActionListener(addPatientH);
@@ -140,9 +170,12 @@ public class PatientInputGUI
         addPatientButtonP = new JPanel();
         addPatientButtonP.add(addPatientB);
         
+        // Set optional layout
         int rows = 1;
         int columns = 2;
         GridLayout gridLayout = new GridLayout(rows, columns);
+        
+        // Initialize JPanels and add JPanel components
         patientIDP = new JPanel();
 //        patientIDP.setLayout(gridLayout);
         patientIDP.add(patientIDL);
@@ -183,6 +216,7 @@ public class PatientInputGUI
         weightP.add(weightL);
         weightP.add(weightTF);
         
+        // Nest JPanels within base JPanel
         panel.add(clinicNumberP);
         panel.add(firstNameP);
         panel.add(middleNameP);
@@ -195,6 +229,10 @@ public class PatientInputGUI
         return panel;
     }
     
+    /**
+     * This method clears the fields within the input panel.
+     * 
+     */
     public void clearAddPatientTF()
     {
         patientIDTF.setText("");
@@ -226,6 +264,12 @@ public class PatientInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a clinic number is valid and throws
+     * an IllegalArgumentException if it isn't.
+     * 
+     * @param clinicNum the String of the clinic number to be validated
+     */
     public void validateClinicNum(String clinicNum)
     {
         String clinicNumStr = clinicNum;
@@ -238,6 +282,13 @@ public class PatientInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a birth date is valid and throws
+     * an ParseException if it isn't.
+     * 
+     * @param birthDate the String of the birth date to be validated
+     * @throws java.text.ParseException if birth date is invalid
+     */
     public void validateBirthDate(String birthDate) throws ParseException
     {
         String birthDateStr = birthDate;
@@ -254,6 +305,12 @@ public class PatientInputGUI
         }
     }
     
+    /**
+     * This method determines whether or not a height/weight is valid and throws
+     * an NumberFormatException if it isn't.
+     * 
+     * @param size the String of the height or weight to be validated
+     */
     public void validateSize(String size)
     {
         String sizeStr = size;
@@ -271,7 +328,14 @@ public class PatientInputGUI
             throw e;
         }
     }
-            
+
+    /** 
+     * This class performs the action of adding a patient by pressing
+     * a button.
+     * 
+     * @author Benjamin Menning, Dan Johnson, Holly Schreader
+     * @version 05/05/2015
+     */
     private class addPatientButtonHandler implements ActionListener
     {
         public void actionPerformed(ActionEvent e)
@@ -312,24 +376,17 @@ public class PatientInputGUI
                 Logger.getLogger(PatientInputGUI.class.getName()).log(Level.SEVERE, 
                         null, ex);
             }
-//            catch (IllegalArgumentException ex)
-//            {
-//                
-//            }
         }
     }
             
+    /**
+     * This constructor contains a parameter to assign the medical clinic 
+     * database for the patient input GUI.
+     * 
+     * @param medicalClinicObj the medical clinic DB to be assigned
+     */
     public PatientInputGUI(MedicalClinicDB medicalClinicObj)
     {
         medicalClinicDB = medicalClinicObj;
-    }
-    
-    public static void main(String[] argv) throws SQLException, ParseException 
-    {
-        MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
-        PatientInputGUI patientInputGUI = new PatientInputGUI(medicalClinicDB);
-        patientInputGUI.validateClinicNum("4-123-456");
-        patientInputGUI.validateBirthDate("1920-11-12");
-        patientInputGUI.validateSize("4000");
     }
 }
