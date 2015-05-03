@@ -159,6 +159,28 @@ public class TreatmentICD9ProcInputGUI
         treatmentCB.setSelectedItem("");
         procedureCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of treatments.
+     * 
+     * @param newTreatment   the treatment to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateTreatmentList(String newTreatment) throws SQLException
+    {
+        treatmentCB.addItem(newTreatment);
+    }
+  
+    /**
+     * This method updates the list of procedures.
+     * 
+     * @param newProcedure   the procedure to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateProcedureList(String newProcedure) throws SQLException
+    {
+        procedureCB.addItem(newProcedure);
+    }
         
     /** 
      * This class performs the action of adding an procedure by pressing
@@ -184,7 +206,7 @@ public class TreatmentICD9ProcInputGUI
                 medicalClinicDB.addTreatmentICD9Procedure(null, treatmentID, 
                         procedureID);
                 clearFields();
-                validEntryStr0 = validEntryStr1 + treatment + 
+                validEntryStr0 = validEntryStr1 + procedure + 
                         validEntryStr2;
                 JOptionPane.showMessageDialog(null, validEntryStr0, 
                         "Success", JOptionPane.INFORMATION_MESSAGE);        

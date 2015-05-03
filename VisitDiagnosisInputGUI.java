@@ -133,6 +133,17 @@ public class VisitDiagnosisInputGUI extends VisitMiscInputGUI
         super.clearFields();
         diagnosisCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of diagnoses.
+     * 
+     * @param newDiagnosis   the diagnosis to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateDiagnosisList(String newDiagnosis) throws SQLException
+    {
+        diagnosisCB.addItem(newDiagnosis);
+    }
         
     /** 
      * This class performs the action of adding an diagnosis by pressing

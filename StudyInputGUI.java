@@ -73,6 +73,7 @@ public class StudyInputGUI
     
     // Declares medical clinic database object
     protected MedicalClinicDB medicalClinicDB;
+    private VisitStudyInputGUI visitStudyInputGUI;
         
     /**
      * This constructor contains a parameter to assign the medical clinic 
@@ -80,9 +81,11 @@ public class StudyInputGUI
      * 
      * @param medicalClinicObj the medical clinic DB to be assigned
      */
-    public StudyInputGUI(MedicalClinicDB medicalClinicObj)
+    public StudyInputGUI(MedicalClinicDB medicalClinicObj, VisitStudyInputGUI 
+            visitStudyInputGUIObj)
     {
         medicalClinicDB = medicalClinicObj;
+        visitStudyInputGUI = visitStudyInputGUIObj;
     }
     
     /**
@@ -153,7 +156,8 @@ public class StudyInputGUI
                 validStudyStr0 = validStudyStr1 + study + 
                         validStudyStr2;
                 JOptionPane.showMessageDialog(null, validStudyStr0, 
-                        "Success", JOptionPane.INFORMATION_MESSAGE);        
+                        "Success", JOptionPane.INFORMATION_MESSAGE); 
+                visitStudyInputGUI.updateStudyList(study);
             } 
             catch (IllegalArgumentException ex)
             {

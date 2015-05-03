@@ -83,6 +83,17 @@ public class PatientHCPInputGUI extends PatientMiscInputGUI
     }
     
     /**
+     * This method updates the list of providers.
+     * 
+     * @param newProvider   the provider to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateProviderList(String newProvider) throws SQLException
+    {
+        healthcareProviderCB.addItem(newProvider);
+    }
+        
+    /**
      * This method creates and retrieves the components for an healthcareProvider 
      * input panel.
      * 

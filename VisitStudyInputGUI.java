@@ -131,6 +131,17 @@ public class VisitStudyInputGUI extends VisitMiscInputGUI
         super.clearFields();
         studyCB.setSelectedItem("");
     }
+    
+    /**
+     * This method updates the list of studies.
+     * 
+     * @param newStudy   the study to be assigned
+     * @throws SQLException if SQL database encounters an error
+     */
+    public void updateStudyList(String newStudy) throws SQLException
+    {
+        studyCB.addItem(newStudy);
+    }
         
     /** 
      * This class performs the action of adding an study by pressing

@@ -8,14 +8,49 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
  
-public class MedicalClinicDB 
+/** 
+ * Author:          Benjamin Menning, Dan Johnson, Holly Schreader
+ * 
+ * Date:            05/05/2015 
+ *                
+ * Course:          CS 485 - 01, Spring 2015
+ * 
+ * Assignment:      Database Project
+ * 
+ * Description:     This program is a medical database program that utilizes a
+ *                  MySQL relational database management system to allow users
+ *                  to input and view information about patients and visits.
+ *                  It allows users to input information on a wide variety of 
+ *                  things, including patient conditions and assistive devices,
+ *                  visit diagnoses and studies, as well as information about
+ *                  healthcare providers or systems used. It also allows a user
+ *                  to search and lookup information about patients based on a
+ *                  wide variety of criteria like name, diagnoses, date of birth
+ *                  and more. It also allows users to see more detailed 
+ *                  information about patients and their visits.
+ */
+
+/** 
+ * This class implements the MedicalDBInterface and defines its methods. These
+ * methods allow certain types of functionality, such as connecting to a 
+ * database, adding various items to the database, determining the IDs of 
+ * entities within the database, and compiling lists of various data within the
+ * database. These methods all provide functionality that the GUI components 
+ * are allowed to use.
+ * 
+ * @author Benjamin Menning, Dan Johnson, Holly Schreader
+ * @version 05/05/2015 
+ */
+public class MedicalClinicDB implements MedicalClinicDBInterface 
 {
+    // String variables for database connectivity
     private String className = "com.mysql.jdbc.Driver";
     private String databaseURL = 
             "jdbc:mysql://cs485project.cloudapp.net:3307/cs485_user";
     private String databaseUsername = "cs485_user";
     private String databasePassword = "Databas3";
-    private String completeSearchTerm;
+
+    // String variables for querying data and IDs from the database
     private String basePatientQuery = "SELECT * \nFROM Patient";
     private String baseVisitQuery = "SELECT * \nFROM Visit";
     private String patientIDQuery = "SELECT patientID \nFROM Patient";
@@ -33,9 +68,11 @@ public class MedicalClinicDB
     private String studyIDQuery = "SELECT studyID \nFROM Study";
     private String systemIDQuery = "SELECT systemID \nFROM System";
     private String treatmentIDQuery = "SELECT treatmentID \nFROM Treatment";
-    private int queryCriteriaCount = 0;
+
+    // Connection variable for connecting to the database
     private Connection connection = null;
     
+    @Override
     public void connectToDatabase()
     {
 	try 
@@ -60,6 +97,7 @@ public class MedicalClinicDB
 	}
     }
     
+    @Override
     public void addPatient(String patientID, String clinicNumber, String 
             firstName, String middleName, String lastName, String gender, 
             String birthDate, String height, String weight) throws SQLException
@@ -100,6 +138,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addPatientAssistiveDevice(String patientAssistiveDeviceID, 
             String patientID, String assistiveDeviceID) throws SQLException
     {
@@ -127,6 +166,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addPatientHealthcareProvider(String patientHealthcareProviderID,
             String patientID, String healthcareProviderID, String 
                     healthcareProviderType) throws SQLException
@@ -157,6 +197,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addPatientCondition(String patientConditionID, String patientID,
             String conditionID) throws SQLException
     {
@@ -184,6 +225,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addVisit(String visitID, String visitNumber, String 
             visitDate, String patientID, String healthcareProviderID, String dateAnalysisComplete, 
             String dateProcessingComplete) throws SQLException
@@ -220,6 +262,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addVisitDiagnosis(String visitDiagnosisID, String visitID,
             String diagnosisID) throws SQLException
     {
@@ -247,6 +290,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addVisitFile(String visitFileID, String visitID, String fileID) 
             throws SQLException
     {
@@ -274,6 +318,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addVisitStudy(String visitStudyID, String visitID,
             String studyID) throws SQLException
     {
@@ -301,6 +346,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
         
+    @Override
     public void addVisitSystem(String visitSystemID, String visitID,
             String systemID) throws SQLException
     {
@@ -328,6 +374,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
 
+    @Override
     public void addVisitTestResults(String visitID, String testResults1,
             String testResults2, String testResults3, String testResults4) 
             throws SQLException
@@ -361,6 +408,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addVisitTreatment(String visitTreatmentID, String visitID,
             String treatmentID) throws SQLException
     {
@@ -388,6 +436,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
 
+    @Override
     public void addAssistiveDevice(String assistiveDeviceID, String 
             assistiveDeviceName) 
             throws SQLException
@@ -414,6 +463,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addCondition(String conditionID, String conditionName) 
             throws SQLException
     {
@@ -439,6 +489,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addFile(String fileID, String fileName, String patientID) 
             throws SQLException
     {
@@ -466,6 +517,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addHealthcareProvider(String healthcareProviderID, String 
             firstName, String middleName, String lastName) 
             throws SQLException
@@ -496,6 +548,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addICD9Diagnosis(String icd9DiagnosisID, String icd9Code, String 
             icd9Description) throws SQLException
     {
@@ -523,6 +576,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addICD9Procedure(String icd9ProcedureID, String icd9Code, String 
             icd9Description) throws SQLException
     {
@@ -550,6 +604,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addStudy(String studyID, String typeOfStudy) 
             throws SQLException
     {
@@ -575,6 +630,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addSystem(String systemID, String systemUsed) 
             throws SQLException
     {
@@ -600,6 +656,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addTreatment(String treatmentID, String treatmentName) 
             throws SQLException
     {
@@ -625,6 +682,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public void addTreatmentICD9Procedure(String treatmentICD9ProcID, String 
             treatmentID, String icd9ProcedureID) throws SQLException
     {
@@ -652,6 +710,7 @@ public class MedicalClinicDB
         System.out.println(query);
     }
     
+    @Override
     public String determinePatientID(String clinicNum) throws SQLException
     {
         Statement stmt = null;
@@ -673,6 +732,7 @@ public class MedicalClinicDB
         return patientID;
     }
 
+    @Override
     public String determinePatientIDVisit(String visitNum) throws SQLException
     {
         Statement stmt = null;
@@ -695,6 +755,7 @@ public class MedicalClinicDB
         return patientID;
     }
     
+    @Override
     public String determineVisitID(String visitNum) throws SQLException
     {
         Statement stmt = null;
@@ -716,6 +777,7 @@ public class MedicalClinicDB
         return visitID;
     }
     
+    @Override
     public String determineAssistiveDeviceID(String assisDevName) throws 
             SQLException
     {
@@ -739,6 +801,7 @@ public class MedicalClinicDB
         return assistiveDeviceID;
     }
     
+    @Override
     public String determineConditionID(String conditionName) throws SQLException
     {
         Statement stmt = null;
@@ -760,6 +823,7 @@ public class MedicalClinicDB
         return conditionID;
     }
 
+    @Override
     public String determineHCPID(String providerName) throws SQLException
     {
         Statement stmt = null;
@@ -786,6 +850,7 @@ public class MedicalClinicDB
         return providerID;
     }
     
+    @Override
     public String determineFileID(String fileName) throws SQLException
     {
         Statement stmt = null;
@@ -807,6 +872,7 @@ public class MedicalClinicDB
         return fileID;
     }
     
+    @Override
     public String determineStudyID(String typeOfStudy) throws SQLException
     {
         Statement stmt = null;
@@ -828,6 +894,7 @@ public class MedicalClinicDB
         return studyID;
     }
     
+    @Override
     public String determineDiagnosisID(String icd9Description) throws 
             SQLException
     {
@@ -850,6 +917,7 @@ public class MedicalClinicDB
         return diagnosisID;
     }
     
+    @Override
     public String determineProcedureID(String icd9Description) throws SQLException
     {
         Statement stmt = null;
@@ -875,6 +943,7 @@ public class MedicalClinicDB
         return procedureID;
     }
     
+    @Override
     public String determineSystemID(String systemUsed) throws SQLException
     {
         Statement stmt = null;
@@ -896,6 +965,7 @@ public class MedicalClinicDB
         return systemID;
     }
     
+    @Override
     public String determineTreatmentID(String treatmentName) throws SQLException
     {
         Statement stmt = null;
@@ -917,6 +987,7 @@ public class MedicalClinicDB
         return treatmentID;
     }
     
+    @Override
     public ArrayList<String> getClinicNumberList() throws SQLException
     {
         ArrayList<String> clinicNumberList = new ArrayList<String>();
@@ -944,6 +1015,7 @@ public class MedicalClinicDB
         return clinicNumberList;
     }
     
+    @Override
     public ArrayList<String> getADList() throws SQLException
     {
         ArrayList<String> assisDevList = new ArrayList<String>();
@@ -971,6 +1043,7 @@ public class MedicalClinicDB
         return assisDevList;
     }
     
+    @Override
     public ArrayList<String> getConditionList() throws SQLException
     {
         ArrayList<String> conditionList = new ArrayList<String>();
@@ -999,6 +1072,7 @@ public class MedicalClinicDB
         return conditionList;
     }
     
+    @Override
     public ArrayList<String> getProcedureList() throws SQLException
     {
         ArrayList<String> procedureList = new ArrayList<String>();
@@ -1026,6 +1100,7 @@ public class MedicalClinicDB
         return procedureList;
     }
     
+    @Override
     public ArrayList<String> getHCPList() throws SQLException
     {
         ArrayList<String> healthcareProviderList = new ArrayList<String>();
@@ -1057,6 +1132,7 @@ public class MedicalClinicDB
         return healthcareProviderList;
     }
     
+    @Override
     public ArrayList<String> getVisitNumberList() throws SQLException
     {
         ArrayList<String> visitNumberList = new ArrayList<String>();
@@ -1084,6 +1160,7 @@ public class MedicalClinicDB
         return visitNumberList;
     }
     
+    @Override
     public ArrayList<String> getStudyList() throws SQLException
     {
         ArrayList<String> studyList = new ArrayList<String>();
@@ -1111,6 +1188,7 @@ public class MedicalClinicDB
         return studyList;
     }
     
+    @Override
     public ArrayList<String> getDiagnosisList() throws SQLException
     {
         ArrayList<String> diagnosisList = new ArrayList<String>();
@@ -1138,6 +1216,7 @@ public class MedicalClinicDB
         return diagnosisList;
     }
     
+    @Override
     public ArrayList<String> getSystemList() throws SQLException
     {
         ArrayList<String> systemList = new ArrayList<String>();
@@ -1165,6 +1244,7 @@ public class MedicalClinicDB
         return systemList;
     }
     
+    @Override
     public ArrayList<String> getTreatmentList() throws SQLException
     {
         ArrayList<String> treatmentList = new ArrayList<String>();
@@ -1192,12 +1272,7 @@ public class MedicalClinicDB
         return treatmentList;
     }
     
-    /**
-     * This method determines whether or not a field is a empty and throws an
-     * IllegalArgumentException if it is.
-     * 
-     * @param field the String to be evaluated as empty or not
-     */
+    @Override
     public void isFieldEmpty(String field)
     {
         boolean isEmpty = false;
@@ -1209,44 +1284,4 @@ public class MedicalClinicDB
         }
 //        return isEmpty;
     }
-        
-//    /**
-//     * This method determines whether or not a field is a empty and throws an
-//     * IllegalArgumentException if it is.
-//     * 
-//     * @param field the String to be evaluated as empty or not
-//     */
-//    public boolean isFieldEmpty2(String field)
-//    {
-//        boolean isEmpty = false;
-//        String fieldStr = field;
-//        isEmpty = fieldStr.equals("");
-//        if(isEmpty == true)
-//        {
-//            throw new IllegalArgumentException();
-//        }
-//        return isEmpty;
-//    }
- 
-//    public static void main(String[] argv) throws SQLException 
-//    {
-//      MedicalClinicDB medicalClinicDB = new MedicalClinicDB();
-//      medicalClinicDB.connectToDatabase();
-//      medicalClinicDB.determinePatientID("8-765-452");
-//      ArrayList<String> poopList = new ArrayList<String>();
-//      poopList = medicalClinicDB.getClinicNumberList();
-//      
-//      medicalClinicDB.searchPatient();
-//      medicalClinicDB.searchFirstName("John");
-//      medicalClinicDB.searchMiddleName("William");
-//      medicalClinicDB.searchLastName("Smith");
-//      medicalClinicDB.searchPatientID("1");
-//      medicalClinicDB.search();
-      
-//      medicalClinicDB.addPatient("53", "2-333-333", "john", "john", "john", "M", "1990-07-27", "120", "120");
-//      medicalClinicDB.addPatientAssistiveDevice("500", "500", "500");
-//      medicalClinicDB.addPatientCondition("500", "500", "500");
-//      medicalClinicDB.addPatientHealthcareProvider("500", "500", "500", "Primary");
-//      medicalClinicDB.testQuery();
-//    }
 }
