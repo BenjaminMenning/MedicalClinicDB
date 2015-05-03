@@ -80,25 +80,25 @@ public class SearchGUIVisitInfoDB {
 			}
 			
 			rs = s.executeQuery(diagnosisQuery);
-			
+			diagnosis.clear();
 			while(rs.next()) {
 				diagnosis.add(rs.getString("icd9Code") + " - " + rs.getString(("icd9Description")));
 			}
 			
 			rs = s.executeQuery(studyQuery);
-			
+			study.clear();
 			while(rs.next()) {
 				study.add(rs.getString("studyID") + " - " + rs.getString(("typeOfStudy")));
 			}
 			
 			rs = s.executeQuery(SystemQuery);
-			
+			system.clear();
 			while(rs.next()) {
 				system.add(rs.getString("systemID") + " - " + rs.getString(("systemUsed")));
 			}
 			
 			rs = s.executeQuery(treatmentQuery);
-			
+			treatment.clear();
 			while(rs.next()) {
 				Vector<String> row = new Vector<>(4);
 				row.add(rs.getString("treatmentID"));
@@ -129,7 +129,7 @@ public class SearchGUIVisitInfoDB {
 		try {
 			Statement s = connection.createStatement();
 			ResultSet rs = s.executeQuery(procedureQuery);
-			
+			procedure.clear();
 			while(rs.next()) {
 				procedure.add(rs.getString("icd9Code") + " - " + rs.getString(("icd9Description")));
 			}
