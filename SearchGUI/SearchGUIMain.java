@@ -62,9 +62,9 @@ public class SearchGUIMain {
 	private JScrollPane scrollPane;
 
 	private String[] columnNames = { "Patient ID", "Clinic Number",
-			"First Name", "Last Name", "Gender", "DOB", "Provider" };
+			"First Name", "Last Name", "Gender", "DOB" };
 
-	private Object[][] data = { { "", "", "", "", "", "", "" } };
+	private Object[][] data = { { "", "", "", "", "", "" } };
 
 	private Map<String, String> terms = new HashMap<String, String>();
 
@@ -318,7 +318,7 @@ public class SearchGUIMain {
 		});
 		txtFldDOBStart.setForeground(Color.LIGHT_GRAY);
 		txtFldDOBStart.setText("Start");
-		txtFldDOBStart.setToolTipText("MM/DD/YYYY");
+		txtFldDOBStart.setToolTipText("YYYY-MM-DD");
 		txtFldDOBStart.setColumns(10);
 		txtFldDOBStart.setBounds(298, 132, 110, 28);
 		frame.getContentPane().add(txtFldDOBStart);
@@ -392,7 +392,7 @@ public class SearchGUIMain {
 			}
 		});
 		txtFldDOBEnd.setForeground(Color.LIGHT_GRAY);
-		txtFldDOBEnd.setToolTipText("MM/DD/YYYY");
+		txtFldDOBEnd.setToolTipText("YYYY-MM-DD");
 		txtFldDOBEnd.setText("End");
 		txtFldDOBEnd.setColumns(10);
 		txtFldDOBEnd.setBounds(407, 132, 110, 28);

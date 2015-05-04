@@ -62,10 +62,12 @@ public class SearchGUIPatientInfo extends JFrame {
 	private JLabel lblVisitProvider = new JLabel();
 	private JLabel lblAnalysis = new JLabel();
 	private JLabel lblProcessing = new JLabel();
+	JLabel lblVisitTestResults = new JLabel("");
 	private JTextArea txtDiagnosis = new JTextArea();
 	JTextArea txtStudy = new JTextArea();
 	JTextArea txtSystem = new JTextArea();
 	JTextArea txtProcedures = new JTextArea();
+	JTextArea txtFiles = new JTextArea();
 	
 	SearchGUIPatientInfoDB pinfo = new SearchGUIPatientInfoDB();
 	SearchGUIVisitInfoDB vinfo = new SearchGUIVisitInfoDB();
@@ -82,7 +84,7 @@ public class SearchGUIPatientInfo extends JFrame {
 		}
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 675, 711);
+		setBounds(100, 100, 675, 750);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -152,9 +154,9 @@ public class SearchGUIPatientInfo extends JFrame {
 		lblJenniferHChatigan.setBounds(514, 51, 155, 16);
 		contentPane.add(lblJenniferHChatigan);
 		
-		JLabel lblConditions = new JLabel("Conditions");
+		JLabel lblConditions = new JLabel("Files");
 		lblConditions.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		lblConditions.setBounds(6, 90, 89, 16);
+		lblConditions.setBounds(191, 90, 89, 16);
 		contentPane.add(lblConditions);
 		
 		JTextArea txtConditions = new JTextArea();
@@ -164,12 +166,12 @@ public class SearchGUIPatientInfo extends JFrame {
 			tmp += pinfo.conditions.get(i) + "\n";
 		}
 		txtConditions.setText(tmp);
-		txtConditions.setBounds(6, 118, 155, 200);
+		txtConditions.setBounds(6, 118, 170, 80);
 		contentPane.add(txtConditions);
 		
 		JLabel lblAssitiveDevices = new JLabel("Assitive Devices");
 		lblAssitiveDevices.setFont(new Font("Lucida Grande", Font.BOLD, 16));
-		lblAssitiveDevices.setBounds(171, 90, 135, 16);
+		lblAssitiveDevices.setBounds(6, 210, 135, 16);
 		contentPane.add(lblAssitiveDevices);
 		
 		JTextArea txtDevices = new JTextArea();
@@ -179,7 +181,7 @@ public class SearchGUIPatientInfo extends JFrame {
 			tmp += pinfo.devices.get(i) + "\n";
 		}
 		txtDevices.setText(tmp);
-		txtDevices.setBounds(171, 118, 170, 200);
+		txtDevices.setBounds(6, 238, 170, 80);
 		contentPane.add(txtDevices);
 		
 		JLabel lblVisits = new JLabel("Visits");
@@ -214,9 +216,11 @@ public class SearchGUIPatientInfo extends JFrame {
 							lblVisitProvider.setText(" ");
 							lblAnalysis.setText(" ");
 							lblProcessing.setText(" ");
+							lblVisitTestResults.setText(" ");
 							txtDiagnosis.setText(" ");
 							txtStudy.setText(" ");
 							txtSystem.setText(" ");
+							txtFiles.setText(" ");
 							
 							try {
 								vinfo.getVisit(visitId);
@@ -229,6 +233,7 @@ public class SearchGUIPatientInfo extends JFrame {
 							lblVisitProvider.setText(vinfo.provider);
 							lblAnalysis.setText(vinfo.analysisDate);
 							lblProcessing.setText(vinfo.processingDate);
+							lblVisitTestResults.setText(vinfo.test);
 							
 							String tmp = "";
 							for (int i = 0; i < vinfo.diagnosis.size(); i++) {
@@ -413,6 +418,32 @@ public class SearchGUIPatientInfo extends JFrame {
 		
 		scrollPane_4.setViewportView(tblTreatment);		
 		
+		JLabel label_2 = new JLabel("Conditions");
+		label_2.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+		label_2.setBounds(6, 90, 89, 16);
+		contentPane.add(label_2);
+		
+		JScrollPane scrollPane_6 = new JScrollPane();
+		scrollPane_6.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_6.setBounds(191, 118, 150, 200);
+		contentPane.add(scrollPane_6);
+		
+		tmp = "";
+		for (int i = 0; i < pinfo.files.size(); i++) {
+			tmp += pinfo.files.get(i) + "\n";
+		}
+		scrollPane_6.setViewportView(txtFiles);
+		txtFiles.setText(tmp);
+		txtFiles.setEditable(false);
+		
+		JLabel lblTestResults = new JLabel("Test Results:");
+		lblTestResults.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblTestResults.setBounds(6, 695, 111, 16);
+		contentPane.add(lblTestResults);
+		
+		
+		lblVisitTestResults.setBounds(110, 695, 559, 16);
+		contentPane.add(lblVisitTestResults);
+		
 	}
-	
 }

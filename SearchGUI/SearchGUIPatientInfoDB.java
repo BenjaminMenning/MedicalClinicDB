@@ -15,6 +15,7 @@ public class SearchGUIPatientInfoDB {
 	protected List<Vector<String>> visits = new ArrayList<>();
 	protected List<String> conditions = new ArrayList<>();
 	protected List<String> devices = new ArrayList<>();
+	protected List<String> files = new ArrayList<>();
 	protected String patientID = null, clinicNumber = null, name = null,
 			gender = null, birthdate = null, height = null, weight = null,
 			primaryProvider = null, secondaryProvider = null;
@@ -58,6 +59,9 @@ public class SearchGUIPatientInfoDB {
 				+ "JOIN HealthcareProvider as hp \n"
 				+ "ON v.healthcareProviderID = hp.healthcareProviderID \n"
 				+ "WHERE v.patientID = " + id;
+		String filesQuery = "SELECT f.fileName \n"
+				+ "FROM File as f \n"
+				+ "WHERE f.patientID = " + id;
 
 		connectToDatabase();
 		
@@ -98,6 +102,12 @@ public class SearchGUIPatientInfoDB {
 			
 			while(rs.next()) {
 				devices.add(rs.getString("assistiveDeviceName"));
+			}
+			
+			rs = s.executeQuery(filesQuery);
+			
+			while(rs.next()) {
+				files.add(rs.getString("fileName"));
 			}
 			
 			rs = s.executeQuery(visitsQuery);

@@ -19,7 +19,7 @@ public class SearchGUIVisitInfoDB {
 	protected List<String> study = new ArrayList<>();
 	protected List<String> system = new ArrayList<>();
 	protected String visitNumber = null, visitDate = null, provider = null, analysisDate = null,
-					processingDate = null;
+					processingDate = null, test = null;
 	
 	private String className = "com.mysql.jdbc.Driver";
 	private String databaseURL = "jdbc:mysql://cs485project.cloudapp.net:3307/cs485_user";
@@ -65,6 +65,11 @@ public class SearchGUIVisitInfoDB {
 				+ "WHERE vtx.visitID = "
 				+ id;
 		
+		String testQuery = "SELECT testResults1, testResults2, testResults3, testResults4 \n"
+				+ "FROM TestResults \n"
+				+ "WHERE testResultsID = "
+				+ id;
+		
 		connectToDatabase();
 		
 		try {
@@ -95,6 +100,24 @@ public class SearchGUIVisitInfoDB {
 			system.clear();
 			while(rs.next()) {
 				system.add(rs.getString("systemID") + " - " + rs.getString(("systemUsed")));
+			}
+			
+			rs = s.executeQuery(testQuery);
+			test = null;
+			while(rs.next()) {
+				test = rs.getString("testResults1");
+				
+				if (!rs.getString("testResults2").isEmpty()) {
+					test += ", " + rs.getString("testResults2");
+				}
+				
+				if (!rs.getString("testResults3").isEmpty()) {
+					test += ", " + rs.getString("testResults3");
+				}
+				
+				if (!rs.getString("testResults4").isEmpty()) {
+					test += ", " + rs.getString("testResults4");
+				}
 			}
 			
 			rs = s.executeQuery(treatmentQuery);

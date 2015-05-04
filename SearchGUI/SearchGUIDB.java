@@ -19,13 +19,14 @@ public class SearchGUIDB {
 	private String databaseURL = "jdbc:mysql://cs485project.cloudapp.net:3307/cs485_user";
 	private String databaseUsername = "cs485_user";
 	private String databasePassword = "Databas3";
-	private String baseQuerySelect = "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate, hp.firstName AS providerFirstName, hp.middleName AS providerMiddleName, hp.lastName AS providerLastName \n"
+	private String baseQuerySelect = "SELECT p.patientID, p.clinicNumber, p.firstName, p.lastName, p.gender, p.birthDate \n"
 			+ "FROM Patient AS p \n";
 	private String baseQueryJoin = "";
-	private String baseQueryLastJoin = "JOIN PatientHealthcareProvider_xref AS phpx \n"
-			+ "ON p.patientID = phpx.patientID \n"
-			+ "JOIN HealthcareProvider AS hp \n"
-			+ "ON hp.healthcareProviderID = phpx.healthcareProviderID \n";
+	// private String baseQueryLastJoin =
+	// "JOIN PatientHealthcareProvider_xref AS phpx \n"
+	// + "ON p.patientID = phpx.patientID \n"
+	// + "JOIN HealthcareProvider AS hp \n"
+	// + "ON hp.healthcareProviderID = phpx.healthcareProviderID \n";
 	private String baseQueryWhere = "WHERE 1 \n";
 	private String baseQueryGroup = "GROUP BY p.patientID";
 	private Connection connection = null;
@@ -94,12 +95,13 @@ public class SearchGUIDB {
 						+ "%') OR icdp.icd9Description LIKE('%"
 						+ terms.get("ICD9 Procedure") + "%')) \n";
 			}
-			
+
 			// Check if Study is needed
 			if (!terms.get("Study").isEmpty()) {
 
 				baseQueryJoin += "JOIN VisitStudy_xref AS vsx \n"
-						+ "ON v.visitID = vsx.visitID \n" + "JOIN Study AS s \n"
+						+ "ON v.visitID = vsx.visitID \n"
+						+ "JOIN Study AS s \n"
 						+ "ON s.studyID = vsx.studyID \n";
 
 				baseQueryWhere += "AND (s.studyID LIKE('%" + terms.get("Study")
@@ -139,22 +141,30 @@ public class SearchGUIDB {
 		}
 
 		// Check for Provider
-		if (!terms.get("Provider").isEmpty()) {
-			baseQueryWhere += "AND (hp.firstName LIKE('%"
-					+ terms.get("Provider") + "%') OR hp.lastName LIKE('%"
-					+ terms.get("Provider") + "%')) \n";
-			baseQueryWhere += "AND phpx.healthcareProviderType = 'Primary'";
-		}
+		if (!terms.get("Provider").isEmpty()
+				|| !terms.get("Secondary Provider").isEmpty()) {
+			baseQueryJoin += "JOIN PatientHealthcareProvider_xref AS phpx \n"
+					+ "ON p.patientID = phpx.patientID \n"
+					+ "JOIN HealthcareProvider AS hp \n"
+					+ "ON hp.healthcareProviderID = phpx.healthcareProviderID \n";
+			
+			//Check for Primary Provider
+			if (!terms.get("Provider").isEmpty()) {
+				baseQueryWhere += "AND (hp.firstName LIKE('"
+						+ terms.get("Provider") + "%') OR hp.lastName LIKE('"
+						+ terms.get("Provider") + "%')) \n";
+				baseQueryWhere += "AND phpx.healthcareProviderType = 'Primary'";
+			}
 
-		// Check for Secondary Provider
-		if (!terms.get("Secondary Provider").isEmpty()) {
-			baseQueryWhere += "AND (hp.firstName LIKE('%"
-					+ terms.get("Secondary Provider")
-					+ "%') OR hp.lastName LIKE('%"
-					+ terms.get("Secondary Provider") + "%')) \n";
-			baseQueryWhere += "AND phpx.healthcareProviderType = 'Secondary'";
+			// Check for Secondary Provider
+			if (!terms.get("Secondary Provider").isEmpty()) {
+				baseQueryWhere += "AND (hp.firstName LIKE('"
+						+ terms.get("Secondary Provider")
+						+ "%') OR hp.lastName LIKE('"
+						+ terms.get("Secondary Provider") + "%')) \n";
+				baseQueryWhere += "AND phpx.healthcareProviderType = 'Secondary'";
+			}
 		}
-
 		// Check for Gender
 		if (!terms.get("Gender").isEmpty()) {
 			baseQueryWhere += "AND p.gender LIKE('%" + terms.get("Gender")
@@ -174,19 +184,18 @@ public class SearchGUIDB {
 		}
 
 		try {
-			String query = baseQuerySelect + baseQueryJoin + baseQueryLastJoin
-					+ baseQueryWhere + baseQueryGroup;
+			// String query = baseQuerySelect + baseQueryJoin + baseQueryLastJoin
+			//		+ baseQueryWhere + baseQueryGroup;
+			String query = baseQuerySelect + baseQueryJoin + baseQueryWhere + baseQueryGroup;
 			System.out.println(query);
 			Statement s = connection.createStatement();
 			ResultSet rs = s.executeQuery(query);
 			while (rs.next()) {
-				Vector<String> row = new Vector<>(9);
+				Vector<String> row = new Vector<>(6);
 				int i = 1;
 				while (i <= 6) {
 					row.add(rs.getString(i++));
 				}
-				row.add(rs.getString(7) + " " + rs.getString(8) + " "
-						+ rs.getString(9));
 				result.add(row);
 			}
 
