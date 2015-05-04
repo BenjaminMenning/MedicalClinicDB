@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
  
 /** 
  * Author:          Benjamin Menning, Dan Johnson, Holly Schreader
@@ -75,26 +77,35 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public void connectToDatabase()
     {
-	try 
-        {
-            Class.forName("com.mysql.jdbc.Driver");
-	} 
-        catch (ClassNotFoundException e) 
-        {
-            e.printStackTrace();
-	}
-        
-	try 
-        {
-            connection = DriverManager.getConnection(databaseURL, 
-                    databaseUsername, databasePassword);
-            System.out.println("Connection Successful");
-	} 
-        catch (SQLException e) 
-        {
-            System.out.println("Connection Failed");
-            e.printStackTrace();
-	}
+        int timeout = 0;
+        try {
+            if(connection == null || connection.isValid(timeout) == false) 
+            {
+                try
+                {
+                    Class.forName("com.mysql.jdbc.Driver");
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                
+                try
+                {
+                    connection = DriverManager.getConnection(databaseURL,
+                            databaseUsername, databasePassword);
+                    System.out.println("Connection Successful");
+                }
+                catch (SQLException e)
+                {
+                    System.out.println("Connection Failed");
+                    e.printStackTrace();
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MedicalClinicDB.class.getName()).log(Level.SEVERE, 
+                    null, ex);
+        }
     }
     
     @Override
@@ -102,6 +113,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             firstName, String middleName, String lastName, String gender, 
             String birthDate, String height, String weight) throws SQLException
     {
+        connectToDatabase();
         String patientIDStr = patientID;
         String clinicNumberStr = "'" + clinicNumber + "'";
         String firstNameStr = "'" + firstName + "'";
@@ -142,6 +154,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addPatientAssistiveDevice(String patientAssistiveDeviceID, 
             String patientID, String assistiveDeviceID) throws SQLException
     {
+        connectToDatabase();
         String patientAssistiveDeviceIDStr = patientAssistiveDeviceID;
         String patientIDStr = patientID;
         String assistiveDeviceIDStr = assistiveDeviceID;
@@ -171,6 +184,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             String patientID, String healthcareProviderID, String 
                     healthcareProviderType) throws SQLException
     {
+        connectToDatabase();
         String patientHealthcareProviderIDStr = patientHealthcareProviderID;
         String patientIDStr = patientID;
         String healthcareProviderIDStr = healthcareProviderID;
@@ -201,6 +215,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addPatientCondition(String patientConditionID, String patientID,
             String conditionID) throws SQLException
     {
+        connectToDatabase();
         String patientConditionIDStr = patientConditionID;
         String patientIDStr = patientID;
         String conditionIDStr = conditionID;
@@ -230,6 +245,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             visitDate, String patientID, String healthcareProviderID, String dateAnalysisComplete, 
             String dateProcessingComplete) throws SQLException
     {
+        connectToDatabase();
         String visitIDStr = visitID;
         String visitNumberStr = "'" + visitNumber + "'";
         String visitDateStr = "'" + visitDate + "'";
@@ -266,6 +282,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addVisitDiagnosis(String visitDiagnosisID, String visitID,
             String diagnosisID) throws SQLException
     {
+        connectToDatabase();
         String visitDiagnosisIDStr = visitDiagnosisID;
         String visitIDStr = visitID;
         String diagnosisIDStr = diagnosisID;
@@ -294,6 +311,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addVisitFile(String visitFileID, String visitID, String fileID) 
             throws SQLException
     {
+        connectToDatabase();
         String visitFileIDStr = visitFileID;
         String visitIDStr = visitID;
         String fileIDStr = fileID;
@@ -322,6 +340,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addVisitStudy(String visitStudyID, String visitID,
             String studyID) throws SQLException
     {
+        connectToDatabase();
         String visitStudyIDStr = visitStudyID;
         String visitIDStr = visitID;
         String studyIDStr = studyID;
@@ -350,6 +369,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addVisitSystem(String visitSystemID, String visitID,
             String systemID) throws SQLException
     {
+        connectToDatabase();
         String visitSystemIDStr = visitSystemID;
         String visitIDStr = visitID;
         String systemIDStr = systemID;
@@ -379,6 +399,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             String testResults2, String testResults3, String testResults4) 
             throws SQLException
     {
+        connectToDatabase();
         String visitIDStr = visitID;
         String testResults1Str = "'" + testResults1 + "'";
         String testResults2Str = "'" + testResults2 + "'";
@@ -412,6 +433,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addVisitTreatment(String visitTreatmentID, String visitID,
             String treatmentID) throws SQLException
     {
+        connectToDatabase();
         String visitTreatmentIDStr = visitTreatmentID;
         String visitIDStr = visitID;
         String treatmentIDStr = treatmentID;
@@ -441,6 +463,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             assistiveDeviceName) 
             throws SQLException
     {
+        connectToDatabase();
         String assistiveDeviceIDStr = assistiveDeviceID;
         String assistiveDeviceNameStr = "'" + assistiveDeviceName + "'";
         Statement stmt = null;
@@ -467,6 +490,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addCondition(String conditionID, String conditionName) 
             throws SQLException
     {
+        connectToDatabase();
         String conditionIDStr = conditionID;
         String conditionNameStr = "'" + conditionName + "'";
         Statement stmt = null;
@@ -493,6 +517,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addFile(String fileID, String fileName, String patientID) 
             throws SQLException
     {
+        connectToDatabase();
         String fileIDStr = fileID;
         String fileNameStr = "'" + fileName + "'";
         String patientIDStr = patientID;
@@ -522,6 +547,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
             firstName, String middleName, String lastName) 
             throws SQLException
     {
+        connectToDatabase();
         String healthcareProviderIDStr = healthcareProviderID;
         String firstNameStr = "'" + firstName + "'";
         String middleNameStr = "'" + middleName + "'";
@@ -552,6 +578,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addICD9Diagnosis(String icd9DiagnosisID, String icd9Code, String 
             icd9Description) throws SQLException
     {
+        connectToDatabase();
         String icd9DiagnosisIDStr = icd9DiagnosisID;
         String icd9CodeStr = "'" + icd9Code + "'";
         String icd9DescriptionStr = "'" + icd9Description + "'";
@@ -580,6 +607,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addICD9Procedure(String icd9ProcedureID, String icd9Code, String 
             icd9Description) throws SQLException
     {
+        connectToDatabase();
         String icd9ProcedureIDStr = icd9ProcedureID;
         String icd9CodeStr = "'" + icd9Code + "'";
         String icd9DescriptionStr = "'" + icd9Description + "'";
@@ -608,6 +636,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addStudy(String studyID, String typeOfStudy) 
             throws SQLException
     {
+        connectToDatabase();
         String studyIDStr = studyID;
         String typeOfStudyStr = "'" + typeOfStudy + "'";
         Statement stmt = null;
@@ -634,6 +663,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addSystem(String systemID, String systemUsed) 
             throws SQLException
     {
+        connectToDatabase();
         String systemIDStr = systemID;
         String systemUsedStr = "'" + systemUsed + "'";
         Statement stmt = null;
@@ -660,6 +690,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addTreatment(String treatmentID, String treatmentName) 
             throws SQLException
     {
+        connectToDatabase();
         String treatmentIDStr = treatmentID;
         String treatmentNameStr = "'" + treatmentName + "'";
         Statement stmt = null;
@@ -686,6 +717,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public void addTreatmentICD9Procedure(String treatmentICD9ProcID, String 
             treatmentID, String icd9ProcedureID) throws SQLException
     {
+        connectToDatabase();
         String treatmentICD9ProcIDStr = treatmentICD9ProcID;
         String treatmentIDStr = treatmentID;
         String icd9ProcedureIDStr = icd9ProcedureID;
@@ -713,6 +745,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determinePatientID(String clinicNum) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String patientID = "";
@@ -735,6 +768,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determinePatientIDVisit(String visitNum) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String patientID = "";
@@ -758,6 +792,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineVisitID(String visitNum) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String visitID = "";
@@ -781,6 +816,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public String determineAssistiveDeviceID(String assisDevName) throws 
             SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String assistiveDeviceID = "";
@@ -804,6 +840,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineConditionID(String conditionName) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String conditionID = "";
@@ -826,6 +863,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineHCPID(String providerName) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String providerID = "";
@@ -853,6 +891,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineFileID(String fileName) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String fileID = "";
@@ -875,6 +914,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineStudyID(String typeOfStudy) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String studyID = "";
@@ -898,6 +938,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     public String determineDiagnosisID(String icd9Description) throws 
             SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String diagnosisID = "";
@@ -920,6 +961,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineProcedureID(String icd9Description) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String procedureID = "";
@@ -946,6 +988,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineSystemID(String systemUsed) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String systemID = "";
@@ -968,6 +1011,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public String determineTreatmentID(String treatmentName) throws SQLException
     {
+        connectToDatabase();
         Statement stmt = null;
         stmt = connection.createStatement();
         String treatmentID = "";
@@ -990,6 +1034,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getClinicNumberList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> clinicNumberList = new ArrayList<String>();
         clinicNumberList.add("");
         Statement stmt = null;
@@ -1018,6 +1063,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getADList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> assisDevList = new ArrayList<String>();
         assisDevList.add("");
         Statement stmt = null;
@@ -1046,6 +1092,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getConditionList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> conditionList = new ArrayList<String>();
         conditionList.add("");
         Statement stmt = null;
@@ -1075,6 +1122,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getProcedureList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> procedureList = new ArrayList<String>();
         procedureList.add("");
         Statement stmt = null;
@@ -1103,6 +1151,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getHCPList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> healthcareProviderList = new ArrayList<String>();
         healthcareProviderList.add("");
         Statement stmt = null;
@@ -1135,6 +1184,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getVisitNumberList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> visitNumberList = new ArrayList<String>();
         visitNumberList.add("");
         Statement stmt = null;
@@ -1163,6 +1213,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getStudyList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> studyList = new ArrayList<String>();
         studyList.add("");
         Statement stmt = null;
@@ -1191,6 +1242,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getDiagnosisList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> diagnosisList = new ArrayList<String>();
         diagnosisList.add("");
         Statement stmt = null;
@@ -1219,6 +1271,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getSystemList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> systemList = new ArrayList<String>();
         systemList.add("");
         Statement stmt = null;
@@ -1247,6 +1300,7 @@ public class MedicalClinicDB implements MedicalClinicDBInterface
     @Override
     public ArrayList<String> getTreatmentList() throws SQLException
     {
+//        connectToDatabase();
         ArrayList<String> treatmentList = new ArrayList<String>();
         treatmentList.add("");
         Statement stmt = null;
