@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
@@ -248,8 +249,11 @@ public class VisitInputGUI extends PatientHCPInputGUI
     public void validateProvider(String providerName) throws SQLException
     {
         String providerNameStr = providerName;
-        String providerID;
-        providerID = medicalClinicDB.determineHCPID(providerNameStr);
+        String providerID = "";
+        try {
+            providerID = medicalClinicDB.determineHCPID(providerNameStr);
+        } catch (NoSuchElementException noSuchElementException) {
+        }
         if(providerID.equals(""))
         {
             errorStr = invalidProviderStr;
@@ -373,8 +377,8 @@ public class VisitInputGUI extends PatientHCPInputGUI
             {
                 JOptionPane.showMessageDialog(null, errorStr, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(VisitInputGUI.class.getName()).log(Level.SEVERE, 
-                        null, ex);
+//                Logger.getLogger(VisitInputGUI.class.getName()).log(Level.SEVERE, 
+//                        null, ex);
             } 
         }
     }

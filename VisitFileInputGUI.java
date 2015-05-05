@@ -171,8 +171,8 @@ public class VisitFileInputGUI extends VisitMiscInputGUI
             {
                 JOptionPane.showMessageDialog(null, invalidEntryStr0, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(VisitFileInputGUI.class.getName()).
-                        log(Level.SEVERE, null, ex);
+//                Logger.getLogger(VisitFileInputGUI.class.getName()).
+//                        log(Level.SEVERE, null, ex);
             }
         }
     }

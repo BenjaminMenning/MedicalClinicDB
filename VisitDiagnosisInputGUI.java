@@ -183,8 +183,8 @@ public class VisitDiagnosisInputGUI extends VisitMiscInputGUI
             {
                 JOptionPane.showMessageDialog(null, invalidEntryStr0, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(VisitDiagnosisInputGUI.class.getName()).
-                        log(Level.SEVERE, null, ex);
+//                Logger.getLogger(VisitDiagnosisInputGUI.class.getName()).
+//                        log(Level.SEVERE, null, ex);
             }
         }
     }

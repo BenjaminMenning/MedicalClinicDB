@@ -182,8 +182,8 @@ public class PatientConditionInputGUI extends PatientMiscInputGUI
             {
                 JOptionPane.showMessageDialog(null, invalidEntryStr0, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(PatientConditionInputGUI.class.getName()).
-                        log(Level.SEVERE, null, ex);
+//                Logger.getLogger(PatientConditionInputGUI.class.getName()).
+//                        log(Level.SEVERE, null, ex);
             }
         }
     }

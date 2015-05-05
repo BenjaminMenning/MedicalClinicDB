@@ -119,7 +119,7 @@ public class ICD9ProcedureInputGUI
         icd9DescriptionTF = new JTextField(20);
         
         // Assign add procedure button and button handler
-        addICD9ProcedureB = new JButton("Add ICD9Procedure");
+        addICD9ProcedureB = new JButton("Add ICD9 Procedure");
         addICD9ProcedureH = new addICD9ProcedureButtonHandler();
         addICD9ProcedureB.addActionListener(addICD9ProcedureH);
         

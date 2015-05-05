@@ -119,7 +119,7 @@ public class ICD9DiagnosisInputGUI
         icd9DescriptionTF = new JTextField(20);
         
         // Assign add diagnosis button and button handler
-        addICD9DiagnosisB = new JButton("Add ICD9Diagnosis");
+        addICD9DiagnosisB = new JButton("Add ICD9 Diagnosis");
         addICD9DiagnosisH = new addICD9DiagnosisButtonHandler();
         addICD9DiagnosisB.addActionListener(addICD9DiagnosisH);
         

@@ -59,14 +59,14 @@ public class PatientInputGUI
     
     // String variables for JLabels
     private String patientIDStr = "Patient ID:";
-    private String clinicNumberStr = "Clinic Number(X-XXX-XXX):";
+    private String clinicNumberStr = "Clinic Number(#-###-###):";
     private String firstNameStr = "First Name:";
     private String middleNameStr = "Middle Name:";
     private String lastNameStr = "Last Name:";                                    
     private String genderStr = "Gender:";
     private String birthDateStr = "Birth Date(YYYY-MM-DD):";
-    private String heightStr = "Height(kg):";
-    private String weightStr = "Weight(cm):";
+    private String heightStr = "Height(cm):";
+    private String weightStr = "Weight(kg):";
     
     // Arrays of string variables for JComboBoxes
     private String[] genderStrings = {"M", "F", "T", "O"};
@@ -80,8 +80,8 @@ public class PatientInputGUI
             + "200px;'>Invalid value(s) entered. Fields cannot be empty. "
             + "Please try again.</p></body></html>";
     private String invalidClinNumStr =  "<html><body><p style='width: "
-            + "200px;'>Invalid clinic number entered. Clinic number must "
-            + "follow the format 'X-XXX-XXX'. Please try again."
+            + "200px;'>Invalid clinic number entered. Clinic number must be "
+            + "numeric and follow the format 'X-XXX-XXX'. Please try again."
             + "</p></body></html>";
     private String invalidBirthDateStr =  "<html><body><p style='width: "
             + "200px;'>Invalid birth date entered. Birth date must "
@@ -372,8 +372,8 @@ public class PatientInputGUI
             {
                 JOptionPane.showMessageDialog(null, errorStr, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(PatientInputGUI.class.getName()).log(Level.SEVERE, 
-                        null, ex);
+//                Logger.getLogger(PatientInputGUI.class.getName()).log(Level.SEVERE, 
+//                        null, ex);
             }
         }
     }

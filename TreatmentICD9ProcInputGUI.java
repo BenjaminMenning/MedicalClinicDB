@@ -220,8 +220,8 @@ public class TreatmentICD9ProcInputGUI
             {
                 JOptionPane.showMessageDialog(null, invalidEntryStr, 
                         "Error", JOptionPane.ERROR_MESSAGE);        
-                Logger.getLogger(TreatmentICD9ProcInputGUI.class.getName()).
-                        log(Level.SEVERE, null, ex);
+//                Logger.getLogger(TreatmentICD9ProcInputGUI.class.getName()).
+//                        log(Level.SEVERE, null, ex);
             }
         }
     }
