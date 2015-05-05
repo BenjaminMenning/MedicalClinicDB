@@ -116,7 +116,7 @@ public class SearchGUIMain {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 700, 600);
+		frame.setBounds(100, 100, 725, 650);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
@@ -435,7 +435,7 @@ public class SearchGUIMain {
 
 					searchData = search.getData();
 
-					System.out.println("Number of data tiems:"
+					System.out.println("Number of data items:"
 							+ searchData.size());
 
 					for (int i = 0; i < searchData.size(); ++i) {

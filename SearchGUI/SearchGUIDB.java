@@ -67,10 +67,10 @@ public class SearchGUIDB {
 			if (!terms.get("ICD9 Diagnosis").isEmpty()) {
 				baseQueryJoin += "JOIN VisitDiagnosis_xref AS vdx \n"
 						+ "ON v.visitID = vdx.visitID \n"
-						+ "JOIN Diagnosis AS d \n"
-						+ "ON d.diagnosisID = vdx.diagnosisID \n"
+//						+ "JOIN Diagnosis AS d \n"
+//						+ "ON d.diagnosisID = vdx.diagnosisID \n"
 						+ "JOIN ICD9Diagnosis AS icdd \n"
-						+ "ON d.icd9DiagnosisID = icdd.icd9DiagnosisID \n";
+						+ "ON icdd.icd9DiagnosisID = vdx.icd9DiagnosisID \n";
 
 				baseQueryWhere += "AND (icdd.icd9Code LIKE('%"
 						+ terms.get("ICD9 Diagnosis")
